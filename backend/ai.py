@@ -90,6 +90,10 @@ def analyze_project(project_text, credentials=None):
                     temperature=0.2,
                 )
             )
+        
+        content = response.choices[0].message.content
+        result = extract_json(content)
+    
 
         if not isinstance(result, dict):
             raise ValueError("Не удалось прочитать ответ AI")
