@@ -21,6 +21,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
@@ -118,12 +119,12 @@ def get_ai_credentials():
     except Exception:
         return ""
 
+
 def normalize_genre(value):
     return " ".join(str(value).casefold().strip().split())
 
 
 def show_analysis(analysis, author_genre=None):
-    status = analysis.get("status", "")
     status = analysis.get("status", "")
 
     if status == "success":
@@ -142,31 +143,34 @@ def show_analysis(analysis, author_genre=None):
         st.caption("Техническая причина ошибки:")
         st.code(error_text[:1200])
 
-        if analysis.get("summary"):
+    if analysis.get("summary"):
         st.write(analysis["summary"])
 
+    # Сопоставление жанра автора с жанрами, определёнными AI
     if status == "success" and author_genre and author_genre != "Другое":
         ai_genres = analysis.get("genres", [])
+
         if isinstance(ai_genres, str):
             ai_genres = [ai_genres]
 
         author_genre_normalized = normalize_genre(author_genre)
-        ai_genres_normalized = [normalize_genre(item) for item in ai_genres]
+        ai_genres_normalized = [
+            normalize_genre(item) for item in ai_genres
+        ]
 
         if author_genre_normalized not in ai_genres_normalized:
             st.warning(
-                f"Жанровые характеристики различаются: вы указали «{author_genre}», "
-                "а AI не включил этот жанр в свой список."
+                f"Жанровые характеристики различаются: вы указали "
+                f"«{author_genre}», а AI не включил этот жанр в свой список."
             )
+
             st.caption(
-                "Это не обязательно ошибка. AI предлагает дополнительную интерпретацию, "
-                "а выбранный вами жанр остаётся основным. При необходимости проверьте "
-                "описание и жанровую разметку проекта."
+                "Это не обязательно ошибка. AI предлагает дополнительную "
+                "интерпретацию, а выбранный вами жанр остаётся основным. "
+                "При необходимости проверьте описание и жанровую разметку проекта."
             )
         else:
             st.success("AI-анализ учитывает выбранный вами жанр.")
-
-    columns = st.columns(2)
 
     columns = st.columns(2)
 
@@ -320,7 +324,7 @@ def page_director():
         try:
             project_id = save_project(project)
             st.success(f"Проект «{name}» сохранён. Номер заявки: {project_id}")
-            show_analysis(analysis)
+            show_analysis(analysis, author_genre=genre)
         except Exception as error:
             st.error(f"Не удалось сохранить проект: {error}")
 
@@ -407,7 +411,10 @@ def page_producer():
                 analysis = project.get("analysis", {})
                 if analysis.get("status") == "success":
                     with st.expander("Посмотреть AI-анализ"):
-                        show_analysis(analysis)
+                        show_analysis(
+                            analysis,
+                            author_genre=project.get("genre"),
+                        )
 
                 producer_id = st.session_state.get("producer_id", "")
                 if producer_id:
@@ -509,7 +516,10 @@ def page_admin():
                         f"[Портфолио]({project['portfolio_url']})"
                     )
 
-                show_analysis(project.get("analysis", {}))
+                show_analysis(
+                    project.get("analysis", {}),
+                    author_genre=project.get("genre"),
+                )
 
     st.markdown("---")
     st.markdown("### Заявки на продвижение")
@@ -559,4 +569,3 @@ elif page == "Продвижение фильма":
     page_campaign()
 elif page == "Команда NMH":
     page_admin()
-
