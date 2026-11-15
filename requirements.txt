@@ -1,1 +1,7 @@
-
+streamlit>=1.36
+gigachat>=0.1.39
+python-dotenv>=1.0
+scikit-learn>=1.4
+pypdf>=4.2
+python-docx>=1.1
+pytest>=8.0
