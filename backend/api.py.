@@ -283,3 +283,17 @@ def campaigns_list():
             status_code=503,
             detail=f"Не удалось загрузить заявки: {error}",
         )
+# Путь к корню проекта
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Подключение CSS и других статических файлов
+app.mount(
+    "/static",
+    StaticFiles(directory=BASE_DIR / "static"),
+    name="static"
+)
+
+# Главная страница сайта
+@app.get("/", include_in_schema=False)
+async def index():
+    return FileResponse(BASE_DIR / "templates" / "index.html")
