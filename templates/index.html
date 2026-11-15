@@ -1,0 +1,666 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#130607">
+    <title>NMH Кинобюро — истории, которые должны видеть</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="page-container">
+
+    <header class="topbar">
+        <div class="topbar-brand">
+            <div class="nmh-logo">
+                <span class="nmh-mark-wrap">
+                    <i class="nmh-rib"></i>
+                    <b class="nmh-mark">NMH</b>
+                </span>
+                <span class="nmh-word">News Media<br>Holding</span>
+            </div>
+            <span class="topbar-tag">Кинобюро</span>
+        </div>
+
+        <button class="mobile-menu-button" id="mobileMenuButton"
+                aria-label="Открыть меню">☰</button>
+
+        <nav class="nav-menu" id="navMenu">
+            <button class="nav-link active" data-page="home">Главная</button>
+            <button class="nav-link" data-page="director">Авторам</button>
+            <button class="nav-link" data-page="producer">Продюсерам</button>
+            <button class="nav-link" data-page="campaign">Продвижение</button>
+            <button class="nav-link" data-page="admin">Команда</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ГЛАВНАЯ -->
+        <section class="page" id="page-home">
+            <div class="hero">
+                <div>
+                    <div class="nmh-logo" style="--ls:20px">
+                        <span class="nmh-mark-wrap">
+                            <i class="nmh-rib"></i>
+                            <b class="nmh-mark">NMH</b>
+                        </span>
+                        <span class="nmh-word">News Media<br>Holding</span>
+                    </div>
+                    <div><span class="kino-tag">КИНОБЮРО</span></div>
+                    <h1>Истории, которые <em>должны видеть</em></h1>
+                    <p>Платформа для независимых режиссёров, продюсеров и медиакоманд. AI помогает найти проект под задачу, а News Media Holding — вывести фильм к зрителю.</p>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+                        <button class="btn btn-primary" data-go="director">Подать проект</button>
+                        <button class="btn" data-go="producer">Найти историю</button>
+                    </div>
+                </div>
+
+                <div class="ticket">
+                    <div class="t-top">ADMIT ONE</div>
+                    <div class="t-mid">NMH<br><span>КИНОБЮРО</span></div>
+                    <div class="t-bot">вход для историй</div>
+                </div>
+            </div>
+
+            <div class="bulbs"></div>
+            <div class="section-title" style="margin-top:0">В афише Кинобюро</div>
+            <div class="script">новые истории от независимых авторов</div>
+            <div id="posterGallery" class="marquee">
+                <div class="track" id="posterTrack"></div>
+            </div>
+            <p class="block-empty" id="demoNote">Карточки с пометкой «Пример» — демонстрационные. Они исчезнут, когда авторы добавят свои проекты.</p>
+
+            <div class="grid-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px">
+                <div class="stat"><div class="num" id="homeProjectCount">—</div><div class="label">проектов в афише</div></div>
+                <div class="stat"><div class="num" id="homeCampaignCount">—</div><div class="label">заявок на продвижение</div></div>
+                <div class="stat"><div class="num">3</div><div class="label">формата сотрудничества</div></div>
+            </div>
+
+            <div class="section-title">С чего начать</div>
+            <div class="grid-roles" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                <div>
+                    <div class="role-card">
+                        <div class="idx">01 / Авторам</div>
+                        <h4>Покажите проект</h4>
+                        <p>Отправьте синопсис и материалы. AI разберёт жанр, темы, аудиторию и даст рекомендации.</p>
+                    </div>
+                    <button class="btn btn-block" data-go="director">Подать проект</button>
+                </div>
+                <div>
+                    <div class="role-card">
+                        <div class="idx">02 / Продюсерам</div>
+                        <h4>Найдите историю</h4>
+                        <p>Опишите задачу своими словами. AI ранжирует проекты по смыслу и объяснит выбор.</p>
+                    </div>
+                    <button class="btn btn-block" data-go="producer">Открыть поиск</button>
+                </div>
+                <div>
+                    <div class="role-card">
+                        <div class="idx">03 / Студиям</div>
+                        <h4>Выведите фильм к зрителю</h4>
+                        <p>Обсудите продвижение через медиаресурсы холдинга и пакеты медиаподдержки.</p>
+                    </div>
+                    <button class="btn btn-block" data-go="campaign">Заявка на продвижение</button>
+                </div>
+            </div>
+
+            <div class="section-title">Как это работает</div>
+            <div class="flow">
+                <div><b>1. Заявка</b>Автор подаёт проект и логлайн</div>
+                <div><b>2. AI-анализ</b>Жанр, темы, аудитория, риски</div>
+                <div><b>3. Подбор</b>Продюсер получает ранжированный список</div>
+                <div><b>4. Продвижение</b>Медиаподдержка через ресурсы NMH</div>
+            </div>
+
+            <div class="section-title">Что даёт холдинг</div>
+            <div class="grid-perks" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                <div class="perk"><b>Медиаресурсы NMH</b><span>Бренды и площадки холдинга приводят фильм к широкой аудитории.</span></div>
+                <div class="perk"><b>Студийный комплекс</b><span>Производственная база холдинга для съёмок и постпродакшна.</span></div>
+                <div class="perk"><b>Пакеты поддержки</b><span>Рекламные форматы и партнёрства под бюджет и стадию проекта.</span></div>
+            </div>
+        </section>
+
+        <!-- АВТОРАМ -->
+        <section class="page hidden" id="page-director">
+            <div class="page-head">
+                <div class="eyebrow">Авторам</div>
+                <h2>Заявка режиссёра</h2>
+                <p>Расскажите о проекте. Чем подробнее описание, тем полезнее будет AI-анализ.</p>
+            </div>
+
+            <form class="form-card" id="directorForm">
+                <div class="form-section">О проекте</div>
+
+                <div class="form-group">
+                    <label for="projectName">Название проекта *</label>
+                    <input id="projectName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="directorName">Имя режиссёра *</label>
+                    <input id="directorName" name="director" required>
+                </div>
+                <div class="form-group">
+                    <label for="synopsis">Синопсис и описание проекта *</label>
+                    <textarea id="synopsis" name="synopsis" required placeholder="О чём ваша история? Кто герои? Что делает её особенной?" style="min-height:180px"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="logline">Логлайн для афиши</label>
+                    <input id="logline" name="logline" maxlength="160" placeholder="1–2 предложения, которые заинтригуют продюсера">
+                    <span class="block-empty">Короткий анонс увидят на главной странице.</span>
+                </div>
+
+                <div class="form-section">Параметры</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="genre">Жанр</label>
+                        <select id="genre" name="genre">
+                            <option>Драма</option><option>Комедия</option>
+                            <option>Триллер</option><option>Фантастика</option>
+                            <option>Документальное кино</option><option>Анимация</option>
+                            <option>Другое</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectFormat">Формат</label>
+                        <select id="projectFormat" name="project_format">
+                            <option>Полный метр</option><option>Короткий метр</option>
+                            <option>Сериал</option><option>Документальный фильм</option>
+                            <option>Веб-сериал</option><option>Другое</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stage">Стадия проекта</label>
+                        <select id="stage" name="stage">
+                            <option>Идея</option><option>Сценарий</option>
+                            <option>Подготовка к съёмкам</option><option>Съёмки</option>
+                            <option>Постпродакшн</option><option>Готовый фильм</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="portfolio">Ссылка на портфолио или фильм</label>
+                        <input id="portfolio" name="portfolio_url" type="url" placeholder="https://">
+                    </div>
+                </div>
+
+                <div class="form-section">Контакты и материалы</div>
+                <div class="form-group">
+                    <label for="directorContact">Контакт для связи *</label>
+                    <input id="directorContact" name="contact" required placeholder="Телефон, email или Telegram">
+                </div>
+                <div class="form-group">
+                    <label for="projectFile">Дополнительные материалы</label>
+                    <input id="projectFile" name="uploaded_file" type="file" accept=".pdf,.docx,.txt">
+                    <span class="block-empty">PDF, DOCX или TXT. До 15 МБ.</span>
+                </div>
+
+                <button class="btn btn-primary btn-block" type="submit">Отправить проект</button>
+                <div id="directorMessage" aria-live="polite"></div>
+            </form>
+            <div id="directorResult"></div>
+        </section>
+
+        <!-- ПРОДЮСЕРАМ -->
+        <section class="page hidden" id="page-producer">
+            <div class="page-head">
+                <div class="eyebrow">Продюсерам</div>
+                <h2>AI-поиск проектов</h2>
+                <p>Опишите задачу своими словами. GigaChat проанализирует проекты и объяснит, какие из них лучше соответствуют запросу.</p>
+            </div>
+
+            <div class="form-card">
+                <form id="searchForm">
+                    <div class="form-group">
+                        <label for="searchQuery">Что вы ищете?</label>
+                        <textarea id="searchQuery" required placeholder="Например: ищу комедийный проект для молодой аудитории с потенциалом для онлайн-платформы..." style="min-height:120px"></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="searchGenres">Желаемые жанры</label>
+                            <input id="searchGenres" placeholder="Комедия, драма">
+                        </div>
+                        <div class="form-group">
+                            <label for="searchThemes">Темы и мотивы</label>
+                            <input id="searchThemes" placeholder="Взросление, семья, отношения">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="producerContact">Ваш контакт или рабочий идентификатор</label>
+                        <input id="producerContact" placeholder="Например, email — нужен для избранного">
+                    </div>
+                    <button class="btn btn-primary btn-block" type="submit">Найти проекты с помощью AI</button>
+                </form>
+                <div id="searchMessage" aria-live="polite"></div>
+            </div>
+            <div id="searchResults"></div>
+        </section>
+
+        <!-- ПРОДВИЖЕНИЕ -->
+        <section class="page hidden" id="page-campaign">
+            <div class="page-head">
+                <div class="eyebrow">Студиям</div>
+                <h2>Продвижение фильма</h2>
+                <p>Расскажите о фильме и задачах продвижения. Команда Кинобюро оценит возможные форматы сотрудничества.</p>
+            </div>
+
+            <form class="form-card" id="campaignForm">
+                <div class="form-section">Фильм</div>
+                <div class="form-group">
+                    <label for="filmName">Название фильма *</label>
+                    <input id="filmName" name="film_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Студия или компания / имя автора *</label>
+                    <input id="company" name="company" required>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="releaseDate">Планируемая дата релиза</label>
+                        <input id="releaseDate" name="release_date" placeholder="Например, весна 2027">
+                    </div>
+                    <div class="form-group">
+                        <label for="budget">Бюджет продвижения</label>
+                        <input id="budget" name="budget" placeholder="Диапазон или «обсуждается»">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="audience">Целевая аудитория</label>
+                    <textarea id="audience" name="audience" placeholder="Для кого этот фильм?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="campaignDescription">Задачи и материалы</label>
+                    <textarea id="campaignDescription" name="description" style="min-height:140px" placeholder="Какая поддержка нужна? Какие материалы уже готовы?"></textarea>
+                </div>
+                <div class="form-section">Контакты</div>
+                <div class="form-group">
+                    <label for="campaignContact">Контактное лицо и способ связи *</label>
+                    <input id="campaignContact" name="contact" required>
+                </div>
+                <button class="btn btn-primary btn-block" type="submit">Отправить заявку</button>
+                <div id="campaignMessage" aria-live="polite"></div>
+            </form>
+        </section>
+
+        <!-- КОМАНДА -->
+        <section class="page hidden" id="page-admin">
+            <div class="page-head">
+                <div class="eyebrow">Команда NMH</div>
+                <h2>Панель Кинобюро</h2>
+                <p>Все проекты авторов и заявки на продвижение в одном месте.</p>
+            </div>
+            <div class="grid-stats" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+                <div class="stat"><div class="num" id="adminProjectCount">—</div><div class="label">всего проектов</div></div>
+                <div class="stat"><div class="num" id="adminCampaignCount">—</div><div class="label">заявок на продвижение</div></div>
+            </div>
+            <div style="display:flex;gap:8px;margin:22px 0;flex-wrap:wrap">
+                <button class="btn btn-primary" id="showAdminProjects">Проекты</button>
+                <button class="btn" id="showAdminCampaigns">Заявки</button>
+            </div>
+            <div id="adminContent"></div>
+            <button class="btn" id="refreshAdmin" style="margin-top:14px">Обновить данные</button>
+            <div id="adminMessage"></div>
+        </section>
+    </main>
+
+    <!-- ПОДВАЛ -->
+    <footer class="footer">
+        <h5>Контакты News Media Holding</h5>
+        <div class="contacts">
+            <div class="contact"><b>Реклама</b><a href="mailto:advertising@newsmedia.ru">advertising@newsmedia.ru</a></div>
+            <div class="contact"><b>Юридическая дирекция</b><a href="tel:+74956633817">+7 (495) 663 38 17</a><a href="mailto:law@newsmedia.ru">law@newsmedia.ru</a></div>
+            <div class="contact"><b>Студийный комплекс</b><a href="tel:+79250622899">+7 (925) 062 28 99</a><a href="mailto:studio@newsmedia.ru">studio@newsmedia.ru</a></div>
+            <div class="contact"><b>Управление персоналом</b><a href="tel:+74956633811">+7 (495) 663 38 11</a><a href="mailto:HR@newsmedia.ru">HR@newsmedia.ru</a></div>
+        </div>
+        <div class="legal">
+            <span>127015, Москва, Бумажный проезд, д. 14, стр. 2</span>
+            <span><a href="https://newsmedia.ru" target="_blank" rel="noopener">newsmedia.ru</a></span>
+            <span>© 2026 News Media Holding. Все права защищены</span>
+        </div>
+        <div class="wordmark">NEWS MEDIA HOLDING</div>
+    </footer>
+</div>
+
+<script>
+const API = "/api";
+let projectsCache = [];
+let campaignsCache = [];
+let adminMode = "projects";
+
+const demoProjects = [
+    {name:"Тихий берег",genre:"Драма",director:"Пример",logline:"Вернувшись в родной город, она находит письма, которые меняют всё, что она знала о семье."},
+    {name:"Последний сеанс",genre:"Триллер",director:"Пример",logline:"Ночной киномеханик замечает в зале зрителя, которого нет ни в одном билете."},
+    {name:"Лето на 35 мм",genre:"Комедия",director:"Пример",logline:"Трое друзей пытаются снять фильм за одни каникулы и влюбляются не в тех."},
+    {name:"Эхо станции",genre:"Фантастика",director:"Пример",logline:"Связист дальней станции принимает сигнал из будущего, адресованный лично ему."}
+];
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    })[c]);
+}
+
+function showMessage(id, text, type="info") {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = `<div class="alert alert-${type}">${escapeHTML(text)}</div>`;
+}
+
+function showPage(page) {
+    document.querySelectorAll(".page").forEach(el => el.classList.add("hidden"));
+    document.getElementById(`page-${page}`)?.classList.remove("hidden");
+    document.querySelectorAll(".nav-link").forEach(el => {
+        el.classList.toggle("active", el.dataset.page === page);
+    });
+    document.getElementById("navMenu").classList.remove("open");
+    window.scrollTo({top:0, behavior:"smooth"});
+    if (page === "home") loadHome();
+    if (page === "admin") loadAdmin();
+}
+
+document.querySelectorAll("[data-page]").forEach(btn =>
+    btn.addEventListener("click", () => showPage(btn.dataset.page))
+);
+document.querySelectorAll("[data-go]").forEach(btn =>
+    btn.addEventListener("click", () => showPage(btn.dataset.go))
+);
+document.getElementById("mobileMenuButton").addEventListener("click", () =>
+    document.getElementById("navMenu").classList.toggle("open")
+);
+
+async function apiRequest(path, options={}) {
+    const response = await fetch(`${API}${path}`, options);
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.detail || data.error || "Ошибка запроса");
+    return data;
+}
+
+function makeLogline(project) {
+    const analysis = project.analysis || {};
+    let text = project.logline || (analysis.status === "success" ? analysis.summary : "") || project.synopsis || "";
+    text = String(text).replace(/\s+/g," ").trim();
+    return text.length > 115 ? text.slice(0, text.lastIndexOf(" ", 115)) + "…" : text;
+}
+
+function posterHTML(project, index) {
+    const variant = [...String(project.name || "")].reduce((a,c)=>a+c.charCodeAt(0), index) % 5;
+    const tag = project.director === "Пример" && !project.id ? "Пример" : (project.stage || "");
+    const by = project.director && project.director !== "Пример" ? `реж. ${project.director}` : "NMH Кинобюро";
+    return `<div class="poster v${variant}">
+        <div class="p-top"><span>${escapeHTML(project.genre || "Кино")}</span><span class="p-tag">${escapeHTML(tag)}</span></div>
+        <div class="p-title">${escapeHTML(project.name)}</div>
+        <div class="p-line">${escapeHTML(makeLogline(project))}</div>
+        <div class="p-by">${escapeHTML(by)}</div>
+    </div>`;
+}
+
+function renderGallery(projects) {
+    let cards = projects.slice(0,12);
+    for (const demo of demoProjects) {
+        if (cards.length >= 6) break;
+        cards.push(demo);
+    }
+    let posters = cards.map(posterHTML).join("");
+    if (!posters) posters = demoProjects.map(posterHTML).join("");
+    const repeated = posters + posters;
+    const track = document.getElementById("posterTrack");
+    track.innerHTML = repeated;
+    track.style.setProperty("--dur", `${Math.max(40, cards.length * 7)}s`);
+    document.getElementById("demoNote").classList.toggle("hidden", projects.length >= 6);
+}
+
+async function loadHome() {
+    try {
+        const [projects, campaigns] = await Promise.all([
+            apiRequest("/projects"), apiRequest("/campaigns")
+        ]);
+        projectsCache = Array.isArray(projects) ? projects : (projects.projects || []);
+        campaignsCache = Array.isArray(campaigns) ? campaigns : (campaigns.campaigns || []);
+        document.getElementById("homeProjectCount").textContent = projectsCache.length;
+        document.getElementById("homeCampaignCount").textContent = campaignsCache.length;
+        renderGallery(projectsCache);
+    } catch (error) {
+        renderGallery([]);
+        document.getElementById("homeProjectCount").textContent = "—";
+        document.getElementById("homeCampaignCount").textContent = "—";
+    }
+}
+
+function renderAnalysis(analysis, authorGenre="") {
+    analysis = analysis || {};
+    const status = analysis.status || "";
+    let html = `<span class="badge ${status === "success" ? "ok" : status === "unavailable" ? "info" : "err"}">${
+        status === "success" ? "✓ AI-анализ выполнен" :
+        status === "unavailable" ? "AI не подключён — проект сохранён без анализа" :
+        "AI-анализ не удался — проект можно сохранить без него"
+    }</span>`;
+    if (analysis.summary) html += `<div class="callout">${escapeHTML(analysis.summary)}</div>`;
+    if (status === "success" && authorGenre && authorGenre !== "Другое") {
+        const genres = Array.isArray(analysis.genres) ? analysis.genres : [analysis.genres].filter(Boolean);
+        if (genres.includes(authorGenre)) {
+            html += `<span class="badge ok">AI-анализ учитывает выбранный вами жанр</span>`;
+        } else {
+            html += `<div class="callout">Жанровые характеристики различаются: вы указали «${escapeHTML(authorGenre)}», а AI не включил этот жанр в свой список.<small>Это не обязательно ошибка: AI предлагает дополнительную интерпретацию, а выбранный вами жанр остаётся основным.</small></div>`;
+        }
+    }
+    const block = (title, value, chips=false) => {
+        let body = "";
+        if (!value || (Array.isArray(value) && !value.length)) body = `<div class="block-empty">Нет данных</div>`;
+        else if (Array.isArray(value)) body = chips
+            ? `<div class="chips">${value.map(x=>`<span class="chip gold">${escapeHTML(x)}</span>`).join("")}</div>`
+            : `<ul class="block-list">${value.map(x=>`<li>${escapeHTML(x)}</li>`).join("")}</ul>`;
+        else body = `<p class="block-text">${escapeHTML(value)}</p>`;
+        return `<div class="block-title">${title}</div>${body}`;
+    };
+    html += `<div class="form-grid" style="margin-top:14px"><div>
+        ${block("Жанры по версии AI",analysis.genres,true)}
+        ${block("Темы",analysis.themes,true)}
+        ${block("Оценка выбранного автором жанра",analysis.genre_assessment)}
+        ${block("Что в тексте указывает на жанр",analysis.genre_evidence)}
+        ${block("Дополнительные жанровые трактовки",analysis.genre_alternatives)}
+        </div><div>
+        ${block("Аудитория",analysis.audience)}
+        ${block("Сильные стороны",analysis.strengths)}
+        ${block("Риски",analysis.risks)}
+        ${block("Рекомендации",analysis.recommendations)}
+        </div></div>`;
+    return html;
+}
+
+document.getElementById("directorForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = form.querySelector("button[type=submit]");
+    button.disabled = true;
+    button.textContent = "Отправляем и анализируем…";
+    document.getElementById("directorResult").innerHTML = "";
+    try {
+        const result = await apiRequest("/projects", {method:"POST", body:new FormData(form)});
+        const project = result.project || result;
+        showMessage("directorMessage", result.message || "Проект сохранён.", "success");
+        document.getElementById("directorResult").innerHTML =
+            `<div class="section-title">Результат AI-анализа</div>${renderAnalysis(project.analysis, project.genre)}
+            <div class="section-title">Развивать проект вместе с NMH?</div>
+            <p class="block-text">Команда Кинобюро может рассмотреть информационную поддержку и продвижение вашего фильма.</p>
+            <button class="btn btn-primary" id="goCampaignFromProject">Перейти к заявке на продвижение</button>`;
+        document.getElementById("goCampaignFromProject").addEventListener("click", () => {
+            document.getElementById("filmName").value = project.name || form.name.value;
+            document.getElementById("company").value = project.director || form.director.value;
+            document.getElementById("campaignDescription").value = project.synopsis || form.synopsis.value;
+            document.getElementById("audience").value = (project.analysis || {}).audience || "";
+            document.getElementById("campaignContact").value = project.contact || form.contact.value;
+            showPage("campaign");
+        });
+        form.reset();
+        loadHome();
+    } catch (error) {
+        showMessage("directorMessage", error.message, "error");
+    } finally {
+        button.disabled = false;
+        button.textContent = "Отправить проект";
+    }
+});
+
+function renderSearchResult(project, producerId) {
+    const score = Math.max(0, Math.min(100, Number(project.score || 0)));
+    const color = score >= 75 ? "var(--good)" : score >= 50 ? "var(--warn)" : "var(--bad)";
+    const list = value => Array.isArray(value) ? value : (value ? [value] : []);
+    return `<article class="project-card">
+        <div class="project-title">${escapeHTML(project.name)}</div>
+        <div class="project-meta">${escapeHTML([project.director,project.genre,project.format,project.stage].filter(Boolean).join(" · "))}</div>
+        <p class="block-text">${escapeHTML(project.synopsis || "")}</p>
+        <div class="score"><div class="score-top"><span>Соответствие запросу по оценке AI</span><b>${score} / 100</b></div>
+        <div class="bar"><i style="width:${score}%;background:${color}"></i></div></div>
+        ${project.fit_summary ? `<div class="callout">${escapeHTML(project.fit_summary)}</div>` : ""}
+        <div class="form-grid">
+            <div><div class="block-title">Почему AI рекомендует проект</div><ul class="block-list">${list(project.reasons).map(x=>`<li>${escapeHTML(x)}</li>`).join("") || "<li>Нет данных</li>"}</ul></div>
+            <div><div class="block-title">Что стоит проверить</div><ul class="block-list">${list(project.concerns).map(x=>`<li>${escapeHTML(x)}</li>`).join("") || "<li>Нет данных</li>"}</ul></div>
+        </div>
+        ${project.analysis ? `<details style="margin-top:12px"><summary class="btn">Полный AI-анализ проекта</summary>${renderAnalysis(project.analysis,project.genre)}</details>` : ""}
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+            ${project.portfolio_url && /^https?:\/\//i.test(project.portfolio_url) ? `<a class="btn" href="${escapeHTML(project.portfolio_url)}" target="_blank" rel="noopener">Портфолио</a>` : ""}
+            ${producerId && project.id ? `<button class="btn" data-favorite="${escapeHTML(project.id)}">★ В избранное</button>` : ""}
+        </div>
+    </article>`;
+}
+
+document.getElementById("searchForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const button = event.currentTarget.querySelector("button[type=submit]");
+    button.disabled = true;
+    button.textContent = "GigaChat подбирает проекты…";
+    showMessage("searchMessage", "Анализируем проекты и сопоставляем их с запросом.");
+    document.getElementById("searchResults").innerHTML = "";
+    try {
+        const projects = await apiRequest("/projects");
+        const payload = {
+            query: document.getElementById("searchQuery").value.trim(),
+            genres: document.getElementById("searchGenres").value.split(",").map(x=>x.trim()).filter(Boolean),
+            themes: document.getElementById("searchThemes").value.split(",").map(x=>x.trim()).filter(Boolean)
+        };
+        const response = await apiRequest("/search", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(payload)
+        });
+        const original = new Map(projects.map(p=>[String(p.id),p]));
+        const results = (response.results || []).map(item=>({...original.get(String(item.id)),...item}));
+        const producerId = document.getElementById("producerContact").value.trim();
+        showMessage("searchMessage", `Проанализировано проектов: ${results.length}. Рейтинг сформирован GigaChat-2.`, "success");
+        document.getElementById("searchResults").innerHTML = `<div class="section-title">Результаты AI-подбора</div>${results.map(p=>renderSearchResult(p,producerId)).join("") || '<div class="alert alert-info">AI не вернул проекты для отображения.</div>'}`;
+    } catch (error) {
+        showMessage("searchMessage", error.message || "AI-поиск временно не выполнился. Попробуйте повторить запрос.", "error");
+    } finally {
+        button.disabled = false;
+        button.textContent = "Найти проекты с помощью AI";
+    }
+});
+
+document.getElementById("searchResults").addEventListener("click", async event => {
+    const button = event.target.closest("[data-favorite]");
+    if (!button) return;
+    const producerId = document.getElementById("producerContact").value.trim();
+    if (!producerId) return;
+    button.disabled = true;
+    try {
+        await apiRequest("/favorites", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({project_id:button.dataset.favorite, producer_id:producerId})
+        });
+        button.textContent = "✓ В избранном";
+    } catch (error) {
+        button.disabled = false;
+        alert(error.message);
+    }
+});
+
+document.getElementById("campaignForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const button = event.currentTarget.querySelector("button[type=submit]");
+    button.disabled = true;
+    button.textContent = "Отправляем…";
+    const form = new FormData(event.currentTarget);
+    const payload = Object.fromEntries(form.entries());
+    try {
+        const result = await apiRequest("/campaigns", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(payload)
+        });
+        showMessage("campaignMessage", result.message || "Заявка принята и сохранена.", "success");
+        event.currentTarget.reset();
+    } catch (error) {
+        showMessage("campaignMessage", error.message, "error");
+    } finally {
+        button.disabled = false;
+        button.textContent = "Отправить заявку";
+    }
+});
+
+function renderAdminProjects(projects) {
+    if (!projects.length) return '<div class="alert alert-info">Проектов пока нет.</div>';
+    return projects.map(p=>`<details class="project-card">
+        <summary class="project-title">${escapeHTML(p.name || "—")} — ${escapeHTML(p.director || "—")}</summary>
+        <div class="project-meta">${escapeHTML([p.genre,p.format,p.stage].filter(Boolean).join(" · "))}</div>
+        <p class="block-text">${escapeHTML(p.synopsis || "")}</p>
+        <div class="block-title">Контакт</div><p>${escapeHTML(p.contact || "Нет данных")}</p>
+        ${p.portfolio_url && /^https?:\/\//i.test(p.portfolio_url) ? `<a class="btn" href="${escapeHTML(p.portfolio_url)}" target="_blank" rel="noopener">Портфолио</a>` : ""}
+        ${renderAnalysis(p.analysis,p.genre)}
+    </details>`).join("");
+}
+
+function renderAdminCampaigns(campaigns) {
+    if (!campaigns.length) return '<div class="alert alert-info">Заявок на продвижение пока нет.</div>';
+    return campaigns.map(c=>`<details class="project-card">
+        <summary class="project-title">${escapeHTML(c.film_name || "—")} — ${escapeHTML(c.company || "—")}</summary>
+        <p class="block-text">${escapeHTML(c.description || "")}</p>
+        <div class="form-grid">
+            <div>${infoAdmin("Релиз",c.release_date)}${infoAdmin("Бюджет",c.budget)}</div>
+            <div>${infoAdmin("Аудитория",c.audience)}${infoAdmin("Контакт",c.contact)}</div>
+        </div>
+    </details>`).join("");
+}
+
+function infoAdmin(title,value) {
+    return `<div class="block-title">${title}</div><p class="block-text">${escapeHTML(value || "Нет данных")}</p>`;
+}
+
+async function loadAdmin() {
+    try {
+        const [projects,campaigns] = await Promise.all([
+            apiRequest("/projects"), apiRequest("/campaigns")
+        ]);
+        projectsCache = Array.isArray(projects) ? projects : (projects.projects || []);
+        campaignsCache = Array.isArray(campaigns) ? campaigns : (campaigns.campaigns || []);
+        document.getElementById("adminProjectCount").textContent = projectsCache.length;
+        document.getElementById("adminCampaignCount").textContent = campaignsCache.length;
+        renderAdmin();
+    } catch (error) {
+        showMessage("adminMessage", error.message, "error");
+    }
+}
+
+function renderAdmin() {
+    document.getElementById("adminContent").innerHTML = adminMode === "projects"
+        ? renderAdminProjects(projectsCache)
+        : renderAdminCampaigns(campaignsCache);
+    document.getElementById("showAdminProjects").classList.toggle("btn-primary",adminMode==="projects");
+    document.getElementById("showAdminCampaigns").classList.toggle("btn-primary",adminMode==="campaigns");
+}
+
+document.getElementById("showAdminProjects").addEventListener("click",()=>{adminMode="projects";renderAdmin();});
+document.getElementById("showAdminCampaigns").addEventListener("click",()=>{adminMode="campaigns";renderAdmin();});
+document.getElementById("refreshAdmin").addEventListener("click",loadAdmin);
+
+async function init() {
+    try {
+        await apiRequest("/health");
+        loadHome();
+    } catch (error) {
+        renderGallery([]);
+        showMessage("directorMessage","Не удалось подключиться к серверу. Проверьте запуск API.","error");
+    }
+}
+init();
+</script>
+</body>
+</html>
