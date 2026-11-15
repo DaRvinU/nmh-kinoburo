@@ -115,54 +115,50 @@ hr {
     }
 
     [data-testid="stAppViewContainer"] .main .block-container {
-        padding: 22px 15px 115px 15px;
+        padding: 15px 14px 30px 14px;
         max-width: 100%;
     }
 
-    /* Нижняя панель */
+    /* Навигация сверху: три кнопки в первом ряду, две во втором */
     .st-key-mobile_navigation {
-        position: fixed;
-        bottom: 0;
-        left: 0;
+        position: relative;
         width: 100%;
-        z-index: 999;
-        background: rgba(17, 18, 20, 0.97);
-        border-top: 1px solid #34363D;
-        padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
-        backdrop-filter: blur(18px);
+        z-index: 10;
+        background: #17191D;
+        border: 1px solid #34363D;
+        border-radius: 14px;
+        padding: 10px;
+        margin-bottom: 22px;
     }
 
     .st-key-mobile_navigation [role="radiogroup"] {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-around;
-        align-items: center;
-        gap: 3px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
         width: 100%;
     }
 
     .st-key-mobile_navigation [role="radiogroup"] label {
-        flex: 1 1 20%;
-        min-width: 0;
-        min-height: 48px;
-        margin: 0;
-        padding: 8px 2px;
         display: flex;
-        justify-content: center;
         align-items: center;
-        text-align: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 52px;
+        margin: 0;
+        padding: 8px 4px;
+        border: 1px solid #34363D;
         border-radius: 10px;
-        background: transparent;
-        color: #96969A;
-        font-size: 10px !important;
+        background: #202228;
+        color: #D0D0D0;
+        text-align: center;
+        font-size: 12px !important;
         font-weight: 600;
-        line-height: 1.2;
-        transition: background 0.2s ease;
+        line-height: 1.25;
     }
 
     .st-key-mobile_navigation [role="radiogroup"] label:has(input:checked) {
         background: #303321;
+        border-color: #D8F078;
         color: #D8F078;
     }
 
@@ -171,7 +167,7 @@ hr {
     }
 
     .st-key-mobile_navigation [role="radiogroup"] label p {
-        font-size: 10px !important;
+        font-size: 12px !important;
         margin: 0;
         white-space: normal;
     }
@@ -180,19 +176,28 @@ hr {
         display: none;
     }
 
+    /* Убираем нижнюю плашку Streamlit */
+    footer {
+        display: none !important;
+    }
+
+    .viewerBadge_container__1QSob {
+        display: none !important;
+    }
+
     /* Заголовки */
     .hero {
         padding: 15px 0 20px;
     }
 
     .hero h1 {
-        font-size: 39px;
-        line-height: 1.05;
+        font-size: 36px;
+        line-height: 1.08;
     }
 
     h1 {
-        font-size: 30px !important;
-        line-height: 1.12 !important;
+        font-size: 29px !important;
+        line-height: 1.15 !important;
     }
 
     h2 {
@@ -219,7 +224,7 @@ hr {
         border-radius: 10px;
     }
 
-    /* Карточки и раскрывающиеся блоки */
+    /* Карточки */
     [data-testid="stExpander"] {
         border: 1px solid #34363D;
         border-radius: 12px;
@@ -233,11 +238,12 @@ hr {
         padding: 12px;
     }
 
-    /* Не даём широким блокам вылезать за экран */
-    .stMarkdown, [data-testid="stVerticalBlock"] {
+    .stMarkdown,
+    [data-testid="stVerticalBlock"] {
         max-width: 100%;
     }
 }
+
 
 </style>
 """, unsafe_allow_html=True)
