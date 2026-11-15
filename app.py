@@ -107,6 +107,7 @@ hr {
     border-color: #34363D;
 }
 
+
 /* Мобильная версия */
 @media (max-width: 768px) {
     [data-testid="stSidebar"] {
@@ -114,38 +115,130 @@ hr {
     }
 
     [data-testid="stAppViewContainer"] .main .block-container {
-        padding-bottom: 110px;
-        padding-left: 16px;
-        padding-right: 16px;
+        padding: 22px 15px 115px 15px;
+        max-width: 100%;
     }
 
+    /* Нижняя панель */
     .st-key-mobile_navigation {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
         z-index: 999;
-        background: rgba(20, 20, 20, 0.97);
+        background: rgba(17, 18, 20, 0.97);
         border-top: 1px solid #34363D;
-        padding: 9px 4px calc(9px + env(safe-area-inset-bottom));
+        padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
+        backdrop-filter: blur(18px);
     }
 
     .st-key-mobile_navigation [role="radiogroup"] {
         display: flex;
+        flex-direction: row;
         flex-wrap: nowrap;
         justify-content: space-around;
-        gap: 2px;
+        align-items: center;
+        gap: 3px;
+        width: 100%;
     }
 
-    .st-key-mobile_navigation label {
+    .st-key-mobile_navigation [role="radiogroup"] label {
+        flex: 1 1 20%;
+        min-width: 0;
+        min-height: 48px;
+        margin: 0;
+        padding: 8px 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border-radius: 10px;
+        background: transparent;
+        color: #96969A;
         font-size: 10px !important;
-        padding: 2px !important;
+        font-weight: 600;
+        line-height: 1.2;
+        transition: background 0.2s ease;
     }
 
-    .st-key-mobile_navigation p {
+    .st-key-mobile_navigation [role="radiogroup"] label:has(input:checked) {
+        background: #303321;
+        color: #D8F078;
+    }
+
+    .st-key-mobile_navigation [role="radiogroup"] label > div:first-child {
         display: none;
     }
+
+    .st-key-mobile_navigation [role="radiogroup"] label p {
+        font-size: 10px !important;
+        margin: 0;
+        white-space: normal;
+    }
+
+    .st-key-mobile_navigation > div > label {
+        display: none;
+    }
+
+    /* Заголовки */
+    .hero {
+        padding: 15px 0 20px;
+    }
+
+    .hero h1 {
+        font-size: 39px;
+        line-height: 1.05;
+    }
+
+    h1 {
+        font-size: 30px !important;
+        line-height: 1.12 !important;
+    }
+
+    h2 {
+        font-size: 23px !important;
+    }
+
+    /* Формы */
+    [data-testid="stTextInput"] input,
+    [data-testid="stTextArea"] textarea,
+    [data-testid="stSelectbox"] [data-baseweb="select"] {
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    [data-testid="stFormSubmitButton"] button {
+        width: 100%;
+        min-height: 48px;
+        border-radius: 10px;
+        font-weight: 700;
+    }
+
+    div.stButton > button {
+        min-height: 44px;
+        border-radius: 10px;
+    }
+
+    /* Карточки и раскрывающиеся блоки */
+    [data-testid="stExpander"] {
+        border: 1px solid #34363D;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    [data-testid="stMetric"] {
+        background: #191B20;
+        border: 1px solid #34363D;
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    /* Не даём широким блокам вылезать за экран */
+    .stMarkdown, [data-testid="stVerticalBlock"] {
+        max-width: 100%;
+    }
 }
+
 </style>
 """, unsafe_allow_html=True)
 
