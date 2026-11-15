@@ -126,8 +126,17 @@ def show_analysis(analysis):
         st.success("AI-анализ выполнен")
     elif status == "unavailable":
         st.info("AI пока не подключён. Проект сохранён без AI-анализа.")
-    else:
+        else:
         st.warning("AI-анализ не удался. Проект можно сохранить без него.")
+
+        error_text = str(analysis.get("error", "Причина не передана"))
+        credentials = get_ai_credentials()
+
+        if credentials:
+            error_text = error_text.replace(credentials, "[ключ скрыт]")
+
+        st.caption("Техническая причина ошибки:")
+        st.code(error_text[:1200])
 
     if analysis.get("summary"):
         st.write(analysis["summary"])
