@@ -29,21 +29,23 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&family=Marck+Script&display=swap');
 
 :root {
-    --bg: #0E0F12;
-    --surface: #16181D;
-    --surface-2: #1C1F25;
-    --line: #2B2E36;
-    --text: #F3EFE8;
-    --muted: #A09E9A;
-    --gold: #D4A468;
-    --gold-hover: #E3B97F;
-    --gold-soft: rgba(212, 164, 104, 0.14);
+    --bg: #130607;
+    --surface: #1E0C0F;
+    --surface-2: #2A1317;
+    --line: #432027;
+    --text: #F8EBDC;
+    --muted: #B79C97;
+    --cream: #F6E7D0;
+    --accent: #E5384F;
+    --accent-hover: #F25A6E;
+    --accent-soft: rgba(229, 56, 79, 0.16);
+    --bulb: #F6C85F;
     --good: #86C08A;
-    --warn: #D4A468;
-    --bad: #D48A78;
+    --warn: #F6C85F;
+    --bad: #FF8A72;
     --radius: 14px;
 }
 
@@ -53,7 +55,7 @@ html, body, [class*="css"], .stApp {
 
 .stApp {
     background:
-        radial-gradient(900px 420px at 85% -10%, rgba(212,164,104,0.10), transparent 60%),
+        radial-gradient(900px 420px at 85% -10%, rgba(229,56,79,0.10), transparent 60%),
         var(--bg);
     color: var(--text);
 }
@@ -78,14 +80,14 @@ footer {
 
 /* ---------- Типографика ---------- */
 h1, h2, h3 {
-    font-family: 'Playfair Display', serif !important;
+    font-family: 'Unbounded', sans-serif !important;
     color: var(--text);
     letter-spacing: -0.01em;
 }
 
 h3 { font-size: 22px !important; }
 
-a { color: var(--gold) !important; }
+a { color: var(--accent) !important; }
 
 /* ---------- Верхняя панель ---------- */
 .brand {
@@ -96,7 +98,7 @@ a { color: var(--gold) !important; }
 }
 
 .brand b {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Unbounded', sans-serif;
     font-size: 26px;
     letter-spacing: 1px;
     color: var(--text);
@@ -105,7 +107,7 @@ a { color: var(--gold) !important; }
 .brand span {
     font-size: 11px;
     letter-spacing: 4px;
-    color: var(--gold);
+    color: var(--accent);
     font-weight: 700;
 }
 
@@ -140,12 +142,12 @@ a { color: var(--gold) !important; }
 }
 
 [data-testid="stRadio"] label:has(input:checked) {
-    background: var(--gold-soft);
-    border-color: var(--gold);
+    background: var(--accent-soft);
+    border-color: var(--accent);
 }
 
 [data-testid="stRadio"] label:has(input:checked) p {
-    color: var(--gold);
+    color: var(--accent);
 }
 
 .nav-divider {
@@ -156,7 +158,7 @@ a { color: var(--gold) !important; }
 
 /* ---------- Заголовки страниц ---------- */
 .eyebrow {
-    color: var(--gold);
+    color: var(--accent);
     font-size: 12px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -176,7 +178,7 @@ a { color: var(--gold) !important; }
 
 .hero h1 em {
     font-style: italic;
-    color: var(--gold);
+    color: var(--accent);
 }
 
 .hero p {
@@ -212,10 +214,10 @@ a { color: var(--gold) !important; }
 }
 
 .stat .num {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Unbounded', sans-serif;
     font-size: 40px;
     font-weight: 700;
-    color: var(--gold);
+    color: var(--accent);
     line-height: 1;
 }
 
@@ -234,14 +236,14 @@ a { color: var(--gold) !important; }
 }
 
 .role-card .idx {
-    color: var(--gold);
+    color: var(--accent);
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 2px;
 }
 
 .role-card h4 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Unbounded', sans-serif;
     font-size: 22px;
     margin: 10px 0 8px;
     color: var(--text);
@@ -278,7 +280,7 @@ a { color: var(--gold) !important; }
 }
 
 .section-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Unbounded', sans-serif;
     font-size: 26px;
     font-weight: 700;
     margin: 40px 0 14px;
@@ -288,19 +290,18 @@ a { color: var(--gold) !important; }
     font-size: 12px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--accent);
     font-weight: 700;
     margin: 18px 0 6px;
 }
 
 /* Контейнеры с рамкой и формы */
-[class*="st-key-result_"],
+[data-testid="stVerticalBlockBorderWrapper"]:has(> div > [data-testid="stVerticalBlock"] .card-marker),
 [data-testid="stForm"] {
     background: var(--surface);
     border: 1px solid var(--line) !important;
     border-radius: var(--radius);
-    padding: 14px 18px;
-    margin-bottom: 16px;
+    padding: 8px 12px;
 }
 
 [data-testid="stForm"] {
@@ -326,9 +327,9 @@ a { color: var(--gold) !important; }
 }
 
 .chip.gold {
-    background: var(--gold-soft);
-    border-color: rgba(212,164,104,.45);
-    color: var(--gold);
+    background: var(--accent-soft);
+    border-color: rgba(229,56,79,.45);
+    color: var(--accent);
 }
 
 .badge {
@@ -341,11 +342,11 @@ a { color: var(--gold) !important; }
 }
 
 .badge.ok   { color: var(--good); border-color: rgba(134,192,138,.5); background: rgba(134,192,138,.10); }
-.badge.info { color: var(--gold); border-color: rgba(212,164,104,.5); background: var(--gold-soft); }
-.badge.err  { color: var(--bad);  border-color: rgba(212,138,120,.5); background: rgba(212,138,120,.10); }
+.badge.info { color: var(--accent); border-color: rgba(229,56,79,.5); background: var(--accent-soft); }
+.badge.err  { color: var(--bad);  border-color: rgba(255,138,114,.5); background: rgba(255,138,114,.10); }
 
 .project-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Unbounded', sans-serif;
     font-size: 24px;
     font-weight: 700;
     margin: 4px 0 4px;
@@ -387,7 +388,7 @@ a { color: var(--gold) !important; }
     font-size: 11px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--accent);
     font-weight: 700;
     margin: 14px 0 6px;
 }
@@ -405,7 +406,7 @@ a { color: var(--gold) !important; }
 
 .callout {
     background: var(--surface-2);
-    border-left: 3px solid var(--gold);
+    border-left: 3px solid var(--accent);
     border-radius: 8px;
     padding: 12px 16px;
     margin: 12px 0;
@@ -427,8 +428,8 @@ a { color: var(--gold) !important; }
 
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
-    border-color: var(--gold) !important;
-    box-shadow: 0 0 0 1px var(--gold) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 1px var(--accent) !important;
 }
 
 label p { font-weight: 600; font-size: 14px; }
@@ -447,22 +448,22 @@ div.stButton > button,
 
 div.stButton > button:hover,
 [data-testid="stLinkButton"] a:hover {
-    border-color: var(--gold);
-    color: var(--gold) !important;
+    border-color: var(--accent);
+    color: var(--accent) !important;
 }
 
 div.stButton > button[kind="primary"],
 [data-testid="stFormSubmitButton"] button[kind="primary"],
 [data-testid="stFormSubmitButton"] button[kind="primaryFormSubmit"] {
-    background: var(--gold);
-    color: #17140F !important;
+    background: var(--accent);
+    color: #FFF5E8 !important;
     border: none;
 }
 
 div.stButton > button[kind="primary"]:hover,
 [data-testid="stFormSubmitButton"] button:hover {
-    background: var(--gold-hover);
-    color: #17140F !important;
+    background: var(--accent-hover);
+    color: #FFF5E8 !important;
 }
 
 [data-testid="stExpander"] {
@@ -486,6 +487,116 @@ hr { border-color: var(--line); }
     [data-testid="stTextInput"] input,
     [data-testid="stTextArea"] textarea { font-size: 16px; }
 }
+/* ============ NMH · КИНО PIN-UP ============ */
+.stApp {
+    background:
+        radial-gradient(800px 380px at 90% -8%, rgba(229,56,79,0.22), transparent 60%),
+        radial-gradient(rgba(246,231,208,0.045) 1.4px, transparent 1.6px) 0 0 / 22px 22px,
+        var(--bg);
+}
+.page-head h2 { font-size: clamp(20px, 3.6vw, 32px); line-height: 1.2; text-transform: uppercase; }
+.section-title { font-size: clamp(17px, 2.6vw, 22px); text-transform: uppercase; }
+.project-title { font-size: 18px; }
+.stat .num { font-size: 30px; }
+.role-card h4 { font-size: 16px; text-transform: uppercase; }
+h3 { font-size: 18px !important; }
+
+.nmh-logo { display: inline-flex; align-items: center; gap: .8em; font-size: var(--ls, 14px); line-height: 1; }
+.nmh-mark-wrap { position: relative; display: inline-block; transform: rotate(-6deg); margin-top: .6em; }
+.nmh-rib { position: absolute; left: .15em; top: -.6em; width: 3.4em; height: .85em;
+    background: linear-gradient(90deg, #FFE9CC, #E5384F); clip-path: polygon(0 0, 100% 22%, 100% 100%, 0 100%); }
+.nmh-mark { display: block; padding: .6em .75em; background: var(--cream); color: var(--accent);
+    font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 1.05em; letter-spacing: .02em; }
+.nmh-word { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: .95em; color: var(--cream);
+    letter-spacing: .02em; line-height: 1.05; text-transform: uppercase; }
+.nmh-logo img { height: 3.2em; width: auto; }
+
+.st-key-topbar [data-testid="stHorizontalBlock"] { flex-direction: row !important; flex-wrap: nowrap !important; align-items: center; }
+.st-key-topbar [data-testid="stColumn"], .st-key-topbar [data-testid="column"] { min-width: 0 !important; }
+.st-key-topbar [data-testid="stColumn"]:last-child, .st-key-topbar [data-testid="column"]:last-child { flex: 0 0 auto !important; width: auto !important; }
+.topbar-brand { display: flex; align-items: center; gap: 14px; }
+.topbar-tag { font-size: 10px; letter-spacing: 3px; font-weight: 700; color: var(--accent); text-transform: uppercase;
+    border-left: 1px solid var(--line); padding-left: 14px; }
+
+[data-testid="stPopover"] { display: flex; justify-content: flex-end; }
+[data-testid="stPopover"] button {
+    width: 48px; min-height: 48px; padding: 0; border-radius: 12px;
+    background: var(--accent-soft); border: 1px solid var(--accent); color: var(--cream) !important;
+    font-size: 24px; line-height: 1; }
+[data-testid="stPopover"] button svg, [data-testid="stPopover"] button [data-testid="stIconMaterial"] { display: none; }
+[data-testid="stPopoverBody"] { background: var(--surface) !important; border: 1px solid var(--line); border-radius: 14px; min-width: 290px; padding: 14px; }
+[data-testid="stPopoverBody"] div.stButton > button {
+    justify-content: flex-start; text-align: left; padding: 12px 16px; min-height: 50px;
+    font-family: 'Unbounded', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: .5px; }
+
+.hero { display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; align-items: center; padding: 34px 0 20px; }
+.hero h1 { font-size: clamp(26px, 5vw, 50px); line-height: 1.12; margin: 22px 0 16px; text-transform: uppercase; font-weight: 800; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p { max-width: 560px; }
+.kino-tag { display: inline-block; margin-top: 22px; padding: 5px 14px; border: 1px solid var(--accent);
+    border-radius: 999px; color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 4px; }
+.script { font-family: 'Marck Script', cursive; color: var(--bulb); font-size: 22px; }
+
+.ticket { position: relative; transform: rotate(3deg); background: var(--cream); color: #2A0D11; border-radius: 12px;
+    padding: 26px 24px; text-align: center; box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+.ticket .t-top { font-size: 11px; letter-spacing: 5px; font-weight: 800; color: var(--accent); }
+.ticket .t-mid { font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 28px; line-height: 1.1; margin: 14px 0;
+    border-top: 2px dashed #2A0D11; border-bottom: 2px dashed #2A0D11; padding: 14px 0; }
+.ticket .t-mid span { color: var(--accent); }
+.ticket .t-bot { font-family: 'Marck Script', cursive; font-size: 20px; }
+
+.bulbs { height: 12px; margin: 34px 0 14px; background: radial-gradient(circle, var(--bulb) 3px, transparent 4px) 0 0 / 24px 12px repeat-x;
+    animation: twinkle 1.6s steps(2) infinite; }
+@keyframes twinkle { 50% { background-position: 12px 0; } }
+
+.marquee { overflow: hidden; padding: 6px 0 14px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+.track { display: flex; gap: 16px; width: max-content; animation: scroll var(--dur, 60s) linear infinite; }
+.marquee:hover .track { animation-play-state: paused; }
+@keyframes scroll { to { transform: translateX(calc(-50% - 8px)); } }
+
+.poster { position: relative; flex: 0 0 auto; width: 232px; height: 300px; padding: 18px; border-radius: 14px;
+    display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(246,231,208,.18); }
+.poster::after { content: "★"; position: absolute; right: 14px; bottom: 10px; font-size: 54px; opacity: .10; }
+.poster .p-top { display: flex; justify-content: space-between; gap: 6px; font-size: 10px; letter-spacing: 1.5px; font-weight: 800; text-transform: uppercase; }
+.poster .p-title { font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 19px; line-height: 1.15; margin: 26px 0 10px; text-transform: uppercase; }
+.poster .p-line { font-size: 13px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+.poster .p-by { margin-top: auto; font-family: 'Marck Script', cursive; font-size: 19px; }
+.poster .p-tag { opacity: .75; }
+.v0 { background: linear-gradient(160deg, #E5384F, #8E1226); color: #FFF3E4; }
+.v1 { background: linear-gradient(160deg, #F6E7D0, #E9CFA8); color: #3A0D14; }
+.v1 .p-title, .v1 .p-top span:first-child { color: #C8102E; }
+.v2 { background: linear-gradient(160deg, #2E1015, #120506); color: #F6E7D0; border-color: var(--bulb); }
+.v2 .p-title { color: var(--bulb); }
+.v3 { background: linear-gradient(160deg, #6B0F1F, #2B0710); color: #FFE9CC; }
+.v4 { background: linear-gradient(160deg, #C8102E, #F25A6E); color: #FFF5E8; }
+
+.perk { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: var(--radius); padding: 20px; height: 100%; }
+.perk b { display: block; font-family: 'Unbounded', sans-serif; font-size: 14px; text-transform: uppercase; margin-bottom: 8px; }
+.perk span { color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+.footer { margin-top: 64px; padding: 36px 28px 0; background: #0A0304; border: 1px solid var(--line); border-radius: 18px 18px 0 0; overflow: hidden; }
+.footer h5 { font-size: 11px; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin: 0 0 18px; }
+.contacts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.contact b { display: block; font-size: 14px; margin-bottom: 8px; color: var(--cream); }
+.contact a { display: block; color: var(--text) !important; text-decoration: none; font-size: 13px; line-height: 1.9; opacity: .85; }
+.contact a:hover { color: var(--accent) !important; opacity: 1; }
+.footer .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+.wordmark { font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: clamp(24px, 7.4vw, 92px); line-height: .9; white-space: nowrap;
+    color: transparent; -webkit-text-stroke: 1px rgba(229,56,79,.65); margin: 22px 0 -.18em; letter-spacing: -.01em; }
+
+@media (prefers-reduced-motion: reduce) {
+    .track, .bulbs { animation: none; }
+    .marquee { overflow-x: auto; }
+}
+@media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; padding-top: 14px; }
+    .ticket { display: none; }
+    .contacts { grid-template-columns: 1fr 1fr; }
+    .topbar-tag { display: none; }
+    .poster { width: 210px; height: 280px; }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -496,12 +607,19 @@ hr { border-color: var(--line); }
 
 init_db()
 
-NAV_ITEMS = ["Главная", "Авторам", "Продюсерам", "Продвижение", "Команда"]
+PAGES = ["Главная", "Авторам", "Продюсерам", "Продвижение", "Команда"]
+PAGE_TITLES = {
+    "Главная": "Главная",
+    "Авторам": "Авторам · подать проект",
+    "Продюсерам": "Продюсерам · AI-поиск",
+    "Продвижение": "Продвижение фильма",
+    "Команда": "Команда NMH",
+}
 
 
 def go_to(page_name):
     """Переход между разделами (вызывается как on_click-колбэк)."""
-    st.session_state["nav"] = page_name
+    st.session_state["page"] = page_name
 
 
 def get_ai_credentials():
@@ -708,6 +826,154 @@ def show_analysis(analysis, author_genre=None):
 
 
 # ============================================================
+# ЛОГОТИП, ФУТЕР, АФИША
+# ============================================================
+
+import base64
+from pathlib import Path
+
+CONTACTS = [
+    ("Реклама", [("", "advertising@newsmedia.ru")]),
+    ("Юридическая дирекция",
+     [("+74956633817", "+7 (495) 663 38 17"), ("", "law@newsmedia.ru")]),
+    ("Студийный комплекс",
+     [("+79250622899", "+7 (925) 062 28 99"), ("", "studio@newsmedia.ru")]),
+    ("Управление персоналом",
+     [("+74956633811", "+7 (495) 663 38 11"), ("", "HR@newsmedia.ru")]),
+]
+
+DEMO_PROJECTS = [
+    {"name": "Тихий берег", "genre": "Драма", "director": "Пример",
+     "logline": "Вернувшись в родной город, она находит письма, "
+                "которые меняют всё, что она знала о семье."},
+    {"name": "Последний сеанс", "genre": "Триллер", "director": "Пример",
+     "logline": "Ночной киномеханик замечает в зале зрителя, "
+                "которого нет ни в одном билете."},
+    {"name": "Лето на 35 мм", "genre": "Комедия", "director": "Пример",
+     "logline": "Трое друзей пытаются снять фильм за одни каникулы "
+                "и влюбляются не в тех."},
+    {"name": "Эхо станции", "genre": "Фантастика", "director": "Пример",
+     "logline": "Связист дальней станции принимает сигнал из будущего, "
+                "адресованный лично ему."},
+]
+
+
+def logo_html(size=14):
+    """Логотип NMH. Если есть assets/nmh_logo.*, используется он."""
+    assets = Path(__file__).parent / "assets"
+    for path in sorted(assets.glob("nmh_logo.*")):
+        mime = {
+            ".svg": "image/svg+xml",
+            ".png": "image/png",
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".webp": "image/webp",
+        }.get(path.suffix.lower())
+        if mime:
+            data = base64.b64encode(path.read_bytes()).decode()
+            return (
+                f'<div class="nmh-logo" style="--ls:{size}px">'
+                f'<img alt="News Media Holding" '
+                f'src="data:{mime};base64,{data}"></div>'
+            )
+
+    return (
+        f'<div class="nmh-logo" style="--ls:{size}px">'
+        '<span class="nmh-mark-wrap"><i class="nmh-rib"></i>'
+        '<b class="nmh-mark">NMH</b></span>'
+        '<span class="nmh-word">News Media<br>Holding</span></div>'
+    )
+
+
+def make_logline(project, limit=115):
+    text = str(project.get("logline") or "").strip()
+
+    if not text:
+        analysis = project.get("analysis")
+        if isinstance(analysis, dict) and analysis.get("status") == "success":
+            text = str(analysis.get("summary") or "").strip()
+
+    if not text:
+        text = str(project.get("synopsis") or "").strip()
+
+    text = " ".join(text.split())
+
+    if len(text) > limit:
+        text = text[:limit].rsplit(" ", 1)[0].rstrip(",.;:—- ") + "…"
+
+    return text
+
+
+def poster_html(project, index):
+    variant = (sum(ord(c) for c in str(project.get("name", ""))) + index) % 5
+    tag = (
+        '<span class="p-tag">Пример</span>'
+        if project.get("director") == "Пример" and not project.get("id")
+        else f'<span class="p-tag">{esc(project.get("stage", ""))}</span>'
+    )
+    director = project.get("director") or ""
+    by = f'реж. {esc(director)}' if director and director != "Пример" else "NMH Кинобюро"
+
+    return (
+        f'<div class="poster v{variant}">'
+        f'<div class="p-top"><span>{esc(project.get("genre", "Кино"))}</span>{tag}</div>'
+        f'<div class="p-title">{esc(project.get("name", ""))}</div>'
+        f'<div class="p-line">{esc(make_logline(project))}</div>'
+        f'<div class="p-by">{by}</div>'
+        '</div>'
+    )
+
+
+def gallery_html(projects):
+    cards = [dict(p) for p in projects[:12]]
+
+    for demo in DEMO_PROJECTS:
+        if len(cards) >= 6:
+            break
+        cards.append(demo)
+
+    posters = [poster_html(p, i) for i, p in enumerate(cards)]
+
+    while len(posters) < 8:
+        posters = posters + posters
+
+    track = "".join(posters) * 2
+    duration = max(40, len(posters) * 7)
+
+    return (
+        '<div class="marquee">'
+        f'<div class="track" style="--dur:{duration}s">{track}</div>'
+        '</div>'
+    )
+
+
+def render_footer():
+    blocks = []
+
+    for title, lines in CONTACTS:
+        links = []
+        for tel, label in lines:
+            if "@" in label:
+                links.append(f'<a href="mailto:{esc(label)}">{esc(label)}</a>')
+            else:
+                links.append(f'<a href="tel:{esc(tel)}">{esc(label)}</a>')
+        blocks.append(
+            f'<div class="contact"><b>{esc(title)}</b>{"".join(links)}</div>'
+        )
+
+    st.markdown(
+        '<div class="footer"><h5>Контакты News Media Holding</h5>'
+        f'<div class="contacts">{"".join(blocks)}</div>'
+        '<div class="legal">'
+        '<span>127015, Москва, Бумажный проезд, д. 14, стр. 2</span>'
+        '<span><a href="https://newsmedia.ru" target="_blank">newsmedia.ru</a></span>'
+        '<span>© 2026 News Media Holding. Все права защищены</span></div>'
+        '<div class="wordmark">NEWS MEDIA HOLDING</div></div>',
+        unsafe_allow_html=True,
+    )
+
+
+# ============================================================
 # ГЛАВНАЯ СТРАНИЦА
 # ============================================================
 
@@ -715,20 +981,43 @@ def page_home():
     projects = get_projects()
     campaigns = get_campaigns()
 
-    st.markdown("""
-    <div class="hero">
-        <div class="eyebrow">News Media Holding presents</div>
-        <h1>Истории, которые<br><em>найдут своих людей.</em></h1>
-        <p>
-        Кинобюро объединяет независимых режиссёров, продюсеров и
-        медиакоманды: AI помогает быстро находить проекты под задачу,
-        а NMH — вывести фильм к аудитории.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        '<div class="hero"><div>'
+        f'{logo_html(20)}'
+        '<div><span class="kino-tag">КИНОБЮРО</span></div>'
+        '<h1>Истории, которые <em>должны видеть</em></h1>'
+        '<p>Платформа для независимых режиссёров, продюсеров и медиакоманд. '
+        'AI помогает найти проект под задачу, а News Media Holding — '
+        'вывести фильм к зрителю.</p>'
+        '</div>'
+        '<div class="ticket"><div class="t-top">ADMIT ONE</div>'
+        '<div class="t-mid">NMH<br><span>КИНОБЮРО</span></div>'
+        '<div class="t-bot">вход для историй</div></div></div>',
+        unsafe_allow_html=True,
+    )
+
+    b1, b2, _ = st.columns([1, 1, 1.4])
+    b1.button("Подать проект", type="primary", key="hero_authors",
+              on_click=go_to, args=("Авторам",), use_container_width=True)
+    b2.button("Найти историю", key="hero_search",
+              on_click=go_to, args=("Продюсерам",), use_container_width=True)
+
+    st.markdown(
+        '<div class="bulbs"></div>'
+        '<div class="section-title" style="margin-top:0">В афише Кинобюро</div>'
+        '<div class="script">новые истории от независимых авторов</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(gallery_html(projects), unsafe_allow_html=True)
+
+    if len(projects) < 6:
+        st.caption(
+            "Карточки с пометкой «Пример» — демонстрационные. "
+            "Они исчезнут, когда авторы добавят свои проекты."
+        )
 
     c1, c2, c3 = st.columns(3)
-    c1.markdown(stat_card(len(projects), "проектов в базе"),
+    c1.markdown(stat_card(len(projects), "проектов в афише"),
                 unsafe_allow_html=True)
     c2.markdown(stat_card(len(campaigns), "заявок на продвижение"),
                 unsafe_allow_html=True)
@@ -740,52 +1029,58 @@ def page_home():
 
     cards = [
         ("01 / Авторам", "Покажите проект",
-         "Отправьте синопсис и материалы — AI разберёт жанр, темы, "
+         "Отправьте синопсис и материалы. AI разберёт жанр, темы, "
          "аудиторию и даст рекомендации.",
          "Подать проект", "Авторам"),
         ("02 / Продюсерам", "Найдите историю",
-         "Опишите задачу своими словами — AI ранжирует проекты по "
-         "смыслу и объяснит выбор.",
+         "Опишите задачу своими словами. AI ранжирует проекты по смыслу "
+         "и объяснит выбор.",
          "Открыть поиск", "Продюсерам"),
         ("03 / Студиям", "Выведите фильм к зрителю",
-         "Обсудите продвижение через медиаресурсы холдинга и "
-         "пакеты медиаподдержки.",
+         "Обсудите продвижение через медиаресурсы холдинга и пакеты "
+         "медиаподдержки.",
          "Заявка на продвижение", "Продвижение"),
     ]
 
-    for column, (idx, title, text, button, target) in zip(
-        st.columns(3), cards
-    ):
+    for column, (idx, title, text, button, target) in zip(st.columns(3), cards):
         with column:
             st.markdown(
-                f"""
-                <div class="role-card">
-                    <div class="idx">{esc(idx)}</div>
-                    <h4>{esc(title)}</h4>
-                    <p>{esc(text)}</p>
-                </div>
-                """,
+                f'<div class="role-card"><div class="idx">{esc(idx)}</div>'
+                f'<h4>{esc(title)}</h4><p>{esc(text)}</p></div>',
                 unsafe_allow_html=True,
             )
-            st.button(
-                button,
-                key=f"home_cta_{target}",
-                on_click=go_to,
-                args=(target,),
-                use_container_width=True,
-            )
+            st.button(button, key=f"home_cta_{target}", on_click=go_to,
+                      args=(target,), use_container_width=True)
 
     st.markdown('<div class="section-title">Как это работает</div>',
                 unsafe_allow_html=True)
+    st.markdown(
+        '<div class="flow">'
+        '<div><b>1. Заявка</b>Автор подаёт проект и логлайн</div>'
+        '<div><b>2. AI-анализ</b>Жанр, темы, аудитория, риски</div>'
+        '<div><b>3. Подбор</b>Продюсер получает ранжированный список</div>'
+        '<div><b>4. Продвижение</b>Платная поддержка через медиа NMH</div>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
 
-    st.markdown("""
-    <div class="flow">
-        <div><b>1. Заявка</b>Автор подаёт проект и материалы</div>
-        <div><b>2. AI-анализ</b>Жанр, темы, аудитория, риски</div>
-        <div><b>3. Подбор</b>Продюсер получает ранжированный список</div>
-        <div><b>4. Продвижение</b>Платная поддержка через медиа NMH</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Что даёт холдинг</div>',
+                unsafe_allow_html=True)
+
+    perks = [
+        ("Медиаресурсы NMH",
+         "Бренды и площадки холдинга приводят фильм к широкой аудитории."),
+        ("Студийный комплекс",
+         "Производственная база холдинга для съёмок и постпродакшна."),
+        ("Пакеты поддержки",
+         "Рекламные форматы и партнёрства под бюджет и стадию проекта."),
+    ]
+
+    for column, (title, text) in zip(st.columns(3), perks):
+        column.markdown(
+            f'<div class="perk"><b>{esc(title)}</b><span>{esc(text)}</span></div>',
+            unsafe_allow_html=True,
+        )
 
 
 # ============================================================
@@ -813,6 +1108,13 @@ def page_director():
                 "О чём ваша история? Кто герои? "
                 "Что делает её особенной?"
             ),
+        )
+
+        logline = st.text_input(
+            "Логлайн для афиши",
+            max_chars=160,
+            placeholder="1–2 предложения, которые заинтригуют продюсера",
+            help="Короткий анонс увидят на главной странице.",
         )
 
         form_section("Параметры")
@@ -916,6 +1218,7 @@ def page_director():
         "name": name.strip(),
         "director": director.strip(),
         "synopsis": synopsis.strip(),
+        "logline": logline.strip(),
         "genre": genre,
         "format": project_format,
         "stage": stage,
@@ -1401,37 +1704,47 @@ def page_admin():
 # НАВИГАЦИЯ
 # ============================================================
 
-brand_col, nav_col = st.columns([1.1, 3])
+st.session_state.setdefault("page", "Главная")
+current_page = st.session_state["page"]
 
-with brand_col:
-    st.markdown(
-        '<div class="brand"><b>NMH</b><span>КИНОБЮРО</span></div>',
-        unsafe_allow_html=True,
-    )
+with st.container(key="topbar"):
+    brand_col, menu_col = st.columns([6, 1])
 
-with nav_col:
-    page = st.radio(
-        "Навигация",
-        NAV_ITEMS,
-        horizontal=True,
-        label_visibility="collapsed",
-        key="nav",
-    )
+    with brand_col:
+        st.markdown(
+            f'<div class="topbar-brand">{logo_html(11)}'
+            '<span class="topbar-tag">Кинобюро</span></div>',
+            unsafe_allow_html=True,
+        )
+
+    with menu_col:
+        with st.popover("☰"):
+            for page_name in PAGES:
+                st.button(
+                    PAGE_TITLES[page_name],
+                    key=f"menu_{page_name}",
+                    on_click=go_to,
+                    args=(page_name,),
+                    type="primary" if page_name == current_page else "secondary",
+                    use_container_width=True,
+                )
 
 st.markdown('<div class="nav-divider"></div>', unsafe_allow_html=True)
 
 
-if page == "Главная":
+if current_page == "Главная":
     page_home()
 
-elif page == "Авторам":
+elif current_page == "Авторам":
     page_director()
 
-elif page == "Продюсерам":
+elif current_page == "Продюсерам":
     page_producer()
 
-elif page == "Продвижение":
+elif current_page == "Продвижение":
     page_campaign()
 
-elif page == "Команда":
+elif current_page == "Команда":
     page_admin()
+
+render_footer()
