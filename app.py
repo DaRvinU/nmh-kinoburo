@@ -106,6 +106,46 @@ div.stButton > button[kind="primary"]:hover {
 hr {
     border-color: #34363D;
 }
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+    [data-testid="stSidebar"] {
+        display: none;
+    }
+
+    [data-testid="stAppViewContainer"] .main .block-container {
+        padding-bottom: 110px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .st-key-mobile_navigation {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+        background: rgba(20, 20, 20, 0.97);
+        border-top: 1px solid #34363D;
+        padding: 9px 4px calc(9px + env(safe-area-inset-bottom));
+    }
+
+    .st-key-mobile_navigation [role="radiogroup"] {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        gap: 2px;
+    }
+
+    .st-key-mobile_navigation label {
+        font-size: 10px !important;
+        padding: 2px !important;
+    }
+
+    .st-key-mobile_navigation p {
+        display: none;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
