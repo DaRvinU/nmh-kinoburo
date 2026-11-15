@@ -118,8 +118,12 @@ def get_ai_credentials():
     except Exception:
         return ""
 
+def normalize_genre(value):
+    return " ".join(str(value).casefold().strip().split())
 
-def show_analysis(analysis):
+
+def show_analysis(analysis, author_genre=None):
+    status = analysis.get("status", "")
     status = analysis.get("status", "")
 
     if status == "success":
