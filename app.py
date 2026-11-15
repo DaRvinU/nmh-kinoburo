@@ -1616,7 +1616,32 @@ def page_campaign():
 # ============================================================
 # ПАНЕЛЬ КОМАНДЫ NMH
 # ============================================================
+def check_admin_password():
+    """Пускает в панель команды только по паролю из Secrets (ADMIN_PASSWORD)."""
+    try:
+        expected = str(st.secrets.get("ADMIN_PASSWORD", ""))
+    except Exception:
+        expected = ""
 
+    if not expected:
+        st.warning("Панель закрыта: пароль администратора не настроен.")
+        return False
+
+    if st.session_state.get("admin_ok"):
+        return True
+
+    with st.form("admin_login"):
+        entered = st.text_input("Пароль команды NMH", type="password")
+        submitted = st.form_submit_button("Войти")
+
+    if submitted:
+        if hmac.compare_digest(entered.encode(), expected.encode()):
+            st.session_state["admin_ok"] = True
+            st.rerun()
+        else:
+            st.error("Неверный пароль.")
+
+    return False
 def page_admin():
     page_header(
         "Команда NMH",
