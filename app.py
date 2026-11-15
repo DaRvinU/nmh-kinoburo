@@ -121,7 +121,6 @@ hr {
         max-width: 100%;
     }
 
-    /* Навигация сверху */
     .st-key-mobile_navigation {
         position: relative !important;
         top: auto !important;
@@ -298,7 +297,6 @@ def show_analysis(analysis, author_genre=None):
     if analysis.get("summary"):
         st.write(analysis["summary"])
 
-    # Сопоставление жанра автора с жанрами AI
     if (
         status == "success"
         and author_genre
@@ -579,7 +577,9 @@ def page_director():
                     "company": director.strip(),
                     "description": synopsis.strip(),
                     "audience": analysis.get("audience", ""),
+                    "contact": contact.strip(),
                 }
+
                 st.session_state["mobile_navigation"] = (
                     "↗ Продвиж."
                 )
@@ -698,8 +698,6 @@ def page_producer():
             st.code(error_text[:1000])
             return
 
-        # Возвращаем к AI-результатам полные данные из Firebase:
-        # портфолио, контакты, полный анализ и остальные поля.
         original_projects = {
             str(project.get("id", "")): project
             for project in projects
@@ -888,7 +886,8 @@ def page_campaign():
         )
 
         contact = st.text_input(
-            "Контактное лицо и способ связи *"
+            "Контактное лицо и способ связи *",
+            value=prefill.get("contact", ""),
         )
 
         submitted = st.form_submit_button(
