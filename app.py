@@ -108,6 +108,7 @@ hr {
 }
 
 
+
 /* Мобильная версия */
 @media (max-width: 768px) {
     [data-testid="stSidebar"] {
@@ -115,66 +116,118 @@ hr {
     }
 
     [data-testid="stAppViewContainer"] .main .block-container {
-        padding: 22px 15px 115px 15px;
+        padding: 15px 14px 30px 14px;
         max-width: 100%;
     }
 
-    /* Нижняя панель */
+    /* Навигация сверху */
     .st-key-mobile_navigation {
-        position: fixed;
-        bottom: 0;
-        left: 0;
+        position: relative !important;
+        top: auto !important;
+        bottom: auto !important;
+        left: auto !important;
         width: 100%;
-        z-index: 999;
-        background: rgba(17, 18, 20, 0.97);
-        border-top: 1px solid #34363D;
-        padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
-        backdrop-filter: blur(18px);
+        z-index: 10;
+        background: #17191D;
+        border: 1px solid #34363D;
+        border-radius: 14px;
+        padding: 10px;
+        margin-bottom: 22px;
     }
 
     .st-key-mobile_navigation [role="radiogroup"] {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-around;
-        align-items: center;
-        gap: 3px;
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
         width: 100%;
     }
 
     .st-key-mobile_navigation [role="radiogroup"] label {
-        flex: 1 1 20%;
-        min-width: 0;
-        min-height: 48px;
-        margin: 0;
-        padding: 8px 2px;
         display: flex;
-        justify-content: center;
         align-items: center;
-        text-align: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 52px;
+        margin: 0;
+        padding: 8px 4px;
+        border: 1px solid #34363D;
         border-radius: 10px;
-        background: transparent;
-        color: #96969A;
-        font-size: 10px !important;
+        background: #202228;
+        color: #D0D0D0;
+        text-align: center;
+        font-size: 12px !important;
         font-weight: 600;
-        line-height: 1.2;
-        transition: background 0.2s ease;
+        line-height: 1.25;
     }
 
     .st-key-mobile_navigation [role="radiogroup"] label:has(input:checked) {
         background: #303321;
+        border-color: #D8F078;
         color: #D8F078;
     }
 
-    .st-key-mobile_navigation [role="radiogroup"] label > div:first-child {
-        display: none;
-    }
-
     .st-key-mobile_navigation [role="radiogroup"] label p {
-        font-size: 10px !important;
+        font-size: 12px !important;
         margin: 0;
         white-space: normal;
     }
+
+    .st-key-mobile_navigation > div > label {
+        display: none;
+    }
+
+    footer {
+        display: none !important;
+    }
+
+    /* Заголовки */
+    .hero h1 {
+        font-size: 36px;
+        line-height: 1.08;
+    }
+
+    h1 {
+        font-size: 29px !important;
+        line-height: 1.15 !important;
+    }
+
+    h2 {
+        font-size: 23px !important;
+    }
+
+    /* Формы */
+    [data-testid="stTextInput"] input,
+    [data-testid="stTextArea"] textarea,
+    [data-testid="stSelectbox"] [data-baseweb="select"] {
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    [data-testid="stFormSubmitButton"] button {
+        width: 100%;
+        min-height: 48px;
+        border-radius: 10px;
+        font-weight: 700;
+    }
+
+    div.stButton > button {
+        min-height: 44px;
+        border-radius: 10px;
+    }
+
+    [data-testid="stExpander"] {
+        border: 1px solid #34363D;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    [data-testid="stMetric"] {
+        background: #191B20;
+        border: 1px solid #34363D;
+        border-radius: 10px;
+        padding: 12px;
+    }
+}
 
     .st-key-mobile_navigation > div > label {
         display: none;
