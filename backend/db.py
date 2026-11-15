@@ -1,13 +1,45 @@
 
 import hashlib
+import json
+import os
 from datetime import datetime, timezone
 
-import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, firestore
 
 
 _firebase_db = None
+
+
+def _load_firebase_config():
+    """Читает Firebase из переменных окружения или старых Streamlit Secrets."""
+
+    raw_config = os.getenv("FIREBASE_CREDENTIALS_JSON", "").strip()
+
+    if raw_config:
+        try:
+            config = json.loads(raw_config)
+        except json.JSONDecodeError as error:
+            raise RuntimeError(
+                "FIREBASE_CREDENTIALS_JSON содержит некорректный JSON."
+            ) from error
+    else:
+        try:
+            import streamlit as st
+            config = dict(st.secrets["firebase"])
+        except Exception as error:
+            raise RuntimeError(
+                "Не найдены настройки Firebase. "
+                "Добавьте FIREBASE_CREDENTIALS_JSON "
+                "в переменные окружения."
+            ) from error
+
+    if "private_key" in config:
+        config["private_key"] = (
+            config["private_key"].replace("\\n", "\n")
+        )
+
+    return config
 
 
 def get_connection():
@@ -17,18 +49,7 @@ def get_connection():
     if _firebase_db is not None:
         return _firebase_db
 
-    try:
-        firebase_config = dict(st.secrets["firebase"])
-    except Exception as error:
-        raise RuntimeError(
-            "Не найдены настройки Firebase. "
-            "Проверьте блок [firebase] в Streamlit Secrets."
-        ) from error
-
-    if "private_key" in firebase_config:
-        firebase_config["private_key"] = (
-            firebase_config["private_key"].replace("\\n", "\n")
-        )
+    firebase_config = _load_firebase_config()
 
     try:
         try:
@@ -54,7 +75,6 @@ def init_db():
 def save_project(project):
     """Сохраняет заявку режиссёра."""
     db = get_connection()
-
     now = datetime.now(timezone.utc).isoformat()
 
     data = {
@@ -66,6 +86,7 @@ def save_project(project):
         "stage": project.get("stage", ""),
         "portfolio_url": project.get("portfolio_url", ""),
         "contact": project.get("contact", ""),
+        "logline": project.get("logline", ""),
         "analysis": project.get("analysis", {}),
         "created_at": now,
     }
@@ -79,7 +100,6 @@ def save_project(project):
 def get_projects():
     """Загружает все проекты из облачной базы."""
     db = get_connection()
-
     documents = db.collection("projects").stream()
 
     projects = []
@@ -104,7 +124,6 @@ def get_projects():
 def save_project_to_favorites(project_id, producer_id):
     """Сохраняет проект в избранное продюсера без дубликатов."""
     db = get_connection()
-
     now = datetime.now(timezone.utc).isoformat()
 
     unique_key = f"{producer_id}_{project_id}"
@@ -122,7 +141,6 @@ def save_project_to_favorites(project_id, producer_id):
 def save_campaign(campaign):
     """Сохраняет заявку на продвижение фильма."""
     db = get_connection()
-
     now = datetime.now(timezone.utc).isoformat()
 
     data = {
@@ -145,7 +163,6 @@ def save_campaign(campaign):
 def get_campaigns():
     """Загружает все заявки на продвижение."""
     db = get_connection()
-
     documents = db.collection("campaigns").stream()
 
     campaigns = []
