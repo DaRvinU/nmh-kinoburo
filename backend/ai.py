@@ -73,6 +73,7 @@ def analyze_project(project_text, credentials=None):
     try:
         with GigaChat(
             credentials=credentials,
+            model="GigaChat",
             verify_ssl_certs=False,
         ) as giga:
             response = giga.chat(
