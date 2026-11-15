@@ -582,26 +582,30 @@ def page_admin():
                 st.write(f"Контакт: {campaign.get('contact', '')}")
 
 
+
 with st.sidebar:
     st.markdown("## NMH")
     st.caption("КИНОБЮРО")
     st.markdown("---")
-
-    page = st.radio(
-        "Навигация",
-        [
-            "Главная",
-            "Авторам",
-            "Продюсерам",
-            "Продвижение фильма",
-            "Команда NMH",
-        ],
-        label_visibility="collapsed",
-    )
-
-    st.markdown("---")
     st.caption("Платформа поиска и развития независимого кино")
 
+navigation = {
+    "⌂ Главная": "Главная",
+    "＋ Авторам": "Авторам",
+    "⌕ Поиск": "Продюсерам",
+    "↗ Продвижение": "Продвижение фильма",
+    "◯ Команда": "Команда NMH",
+}
+
+selected_navigation = st.radio(
+    "Навигация",
+    list(navigation.keys()),
+    horizontal=True,
+    label_visibility="collapsed",
+    key="mobile_navigation",
+)
+
+page = navigation[selected_navigation]
 
 if page == "Главная":
     page_home()
