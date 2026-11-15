@@ -1,3 +1,5 @@
+import html
+from urllib.parse import urlparse
 
 import streamlit as st
 
@@ -17,7 +19,7 @@ st.set_page_config(
     page_title="NMH Кинобюро",
     page_icon="🎬",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 
@@ -27,223 +29,479 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
 
-html, body, [class*="css"] {
+:root {
+    --bg: #0E0F12;
+    --surface: #16181D;
+    --surface-2: #1C1F25;
+    --line: #2B2E36;
+    --text: #F3EFE8;
+    --muted: #A09E9A;
+    --gold: #D4A468;
+    --gold-hover: #E3B97F;
+    --gold-soft: rgba(212, 164, 104, 0.14);
+    --good: #86C08A;
+    --warn: #D4A468;
+    --bad: #D48A78;
+    --radius: 14px;
+}
+
+html, body, [class*="css"], .stApp {
     font-family: 'Manrope', sans-serif;
 }
 
 .stApp {
-    background: #101114;
-    color: #F1F0ED;
+    background:
+        radial-gradient(900px 420px at 85% -10%, rgba(212,164,104,0.10), transparent 60%),
+        var(--bg);
+    color: var(--text);
 }
 
-[data-testid="stSidebar"] {
-    background: #17191E;
-    border-right: 1px solid #303239;
+/* Убираем лишние элементы Streamlit: навигация в верхней панели */
+[data-testid="stSidebar"],
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="collapsedControl"],
+footer {
+    display: none !important;
 }
 
-.hero {
-    padding: 42px 0 30px 0;
+[data-testid="stHeader"] {
+    background: transparent;
 }
 
+[data-testid="stAppViewContainer"] .main .block-container,
+.block-container {
+    max-width: 1080px;
+    padding: 28px 24px 64px;
+}
+
+/* ---------- Типографика ---------- */
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif !important;
+    color: var(--text);
+    letter-spacing: -0.01em;
+}
+
+h3 { font-size: 22px !important; }
+
+a { color: var(--gold) !important; }
+
+/* ---------- Верхняя панель ---------- */
+.brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-top: 6px;
+}
+
+.brand b {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: var(--text);
+}
+
+.brand span {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    font-weight: 700;
+}
+
+[data-testid="stRadio"] [role="radiogroup"] {
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+[data-testid="stRadio"] label {
+    margin: 0;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+}
+
+[data-testid="stRadio"] label > div:first-child {
+    display: none;
+}
+
+[data-testid="stRadio"] label p {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    margin: 0;
+}
+
+[data-testid="stRadio"] label:hover {
+    background: var(--surface-2);
+}
+
+[data-testid="stRadio"] label:has(input:checked) {
+    background: var(--gold-soft);
+    border-color: var(--gold);
+}
+
+[data-testid="stRadio"] label:has(input:checked) p {
+    color: var(--gold);
+}
+
+.nav-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 10px 0 8px;
+}
+
+/* ---------- Заголовки страниц ---------- */
 .eyebrow {
-    color: #D8A66A;
+    color: var(--gold);
     font-size: 12px;
     letter-spacing: 3px;
     text-transform: uppercase;
     font-weight: 700;
 }
 
+.hero {
+    padding: 56px 0 36px;
+}
+
 .hero h1 {
-    font-size: clamp(38px, 6vw, 66px);
+    font-size: clamp(38px, 6vw, 68px);
     line-height: 1.08;
     font-weight: 800;
-    margin: 18px 0;
-    color: #F4F0E9;
+    margin: 18px 0 20px;
+}
+
+.hero h1 em {
+    font-style: italic;
+    color: var(--gold);
 }
 
 .hero p {
-    color: #A7A6A2;
+    color: var(--muted);
     font-size: 17px;
-    max-width: 650px;
+    max-width: 620px;
     line-height: 1.7;
+    margin: 0;
+}
+
+.page-head {
+    padding: 22px 0 18px;
+}
+
+.page-head h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    margin: 10px 0 8px;
+}
+
+.page-head p {
+    color: var(--muted);
+    max-width: 640px;
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* ---------- Карточки ---------- */
+.stat {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+}
+
+.stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+}
+
+.stat .label {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.role-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    min-height: 168px;
+}
+
+.role-card .idx {
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.role-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin: 10px 0 8px;
+    color: var(--text);
+}
+
+.role-card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.flow div {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.flow b {
+    display: block;
+    color: var(--text);
+    margin-bottom: 4px;
 }
 
 .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin: 40px 0 14px;
+}
+
+.form-section {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin: 18px 0 6px;
+}
+
+/* Контейнеры с рамкой и формы */
+[class*="st-key-result_"],
+[data-testid="stForm"] {
+    background: var(--surface);
+    border: 1px solid var(--line) !important;
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 16px;
+}
+
+[data-testid="stForm"] {
+    padding: 20px 22px 22px;
+}
+
+/* ---------- Чипы и бейджи ---------- */
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 10px;
+}
+
+.chip {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 3px 11px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.chip.gold {
+    background: var(--gold-soft);
+    border-color: rgba(212,164,104,.45);
+    color: var(--gold);
+}
+
+.badge {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid;
+}
+
+.badge.ok   { color: var(--good); border-color: rgba(134,192,138,.5); background: rgba(134,192,138,.10); }
+.badge.info { color: var(--gold); border-color: rgba(212,164,104,.5); background: var(--gold-soft); }
+.badge.err  { color: var(--bad);  border-color: rgba(212,138,120,.5); background: rgba(212,138,120,.10); }
+
+.project-title {
+    font-family: 'Playfair Display', serif;
     font-size: 24px;
     font-weight: 700;
-    margin: 28px 0 12px;
+    margin: 4px 0 4px;
+    color: var(--text);
 }
 
-.project-card {
-    background: #191B20;
-    border: 1px solid #34363D;
-    border-radius: 12px;
-    padding: 22px;
-    margin: 12px 0;
+.project-meta {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 8px;
 }
 
-.project-card h3 {
-    margin-top: 0;
-    color: #F4F0E9;
+.score { margin: 14px 0 10px; }
+
+.score-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
 }
 
-.muted {
-    color: #A7A6A2;
-    font-size: 14px;
+.score-top b { color: var(--text); font-size: 15px; }
+
+.bar {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    overflow: hidden;
 }
 
-div.stButton > button[kind="primary"] {
-    background: #C58E55;
-    color: #171717;
-    border: none;
+.bar i {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+}
+
+.block-title {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
     font-weight: 700;
+    margin: 14px 0 6px;
 }
 
-div.stButton > button[kind="primary"]:hover {
-    background: #D9A66E;
-    color: #171717;
+.block-text, .block-list {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
 }
 
-hr {
-    border-color: #34363D;
+.block-list { padding-left: 18px; }
+.block-list li { margin-bottom: 3px; }
+.block-empty { color: var(--muted); font-size: 13px; }
+
+.callout {
+    background: var(--surface-2);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
-/* Мобильная версия */
+.callout small { color: var(--muted); display: block; margin-top: 4px; }
+
+/* ---------- Поля, кнопки ---------- */
+[data-testid="stTextInput"] input,
+[data-testid="stTextArea"] textarea,
+[data-baseweb="select"] > div {
+    background: var(--surface-2) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 10px !important;
+    color: var(--text);
+}
+
+[data-testid="stTextInput"] input:focus,
+[data-testid="stTextArea"] textarea:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 1px var(--gold) !important;
+}
+
+label p { font-weight: 600; font-size: 14px; }
+
+div.stButton > button,
+[data-testid="stFormSubmitButton"] button,
+[data-testid="stLinkButton"] a {
+    border-radius: 10px;
+    min-height: 44px;
+    font-weight: 700;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--text) !important;
+    transition: all .15s;
+}
+
+div.stButton > button:hover,
+[data-testid="stLinkButton"] a:hover {
+    border-color: var(--gold);
+    color: var(--gold) !important;
+}
+
+div.stButton > button[kind="primary"],
+[data-testid="stFormSubmitButton"] button[kind="primary"],
+[data-testid="stFormSubmitButton"] button[kind="primaryFormSubmit"] {
+    background: var(--gold);
+    color: #17140F !important;
+    border: none;
+}
+
+div.stButton > button[kind="primary"]:hover,
+[data-testid="stFormSubmitButton"] button:hover {
+    background: var(--gold-hover);
+    color: #17140F !important;
+}
+
+[data-testid="stExpander"] {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+[data-baseweb="tab-list"] { gap: 6px; }
+
+hr { border-color: var(--line); }
+
+/* ---------- Мобильная версия ---------- */
 @media (max-width: 768px) {
-    [data-testid="stSidebar"] {
-        display: none;
-    }
-
-    [data-testid="stAppViewContainer"] .main .block-container {
-        padding: 15px 14px 30px 14px;
-        max-width: 100%;
-    }
-
-    .st-key-mobile_navigation {
-        position: relative !important;
-        top: auto !important;
-        bottom: auto !important;
-        left: auto !important;
-        width: 100%;
-        z-index: 10;
-        background: #17191D;
-        border: 1px solid #34363D;
-        border-radius: 14px;
-        padding: 10px;
-        margin-bottom: 22px;
-    }
-
-    .st-key-mobile_navigation [role="radiogroup"] {
-        display: grid !important;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-        width: 100%;
-    }
-
-    .st-key-mobile_navigation [role="radiogroup"] label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 0;
-        min-height: 52px;
-        margin: 0;
-        padding: 8px 4px;
-        border: 1px solid #34363D;
-        border-radius: 10px;
-        background: #202228;
-        color: #D0D0D0;
-        text-align: center;
-        font-size: 12px !important;
-        font-weight: 600;
-        line-height: 1.25;
-    }
-
-    .st-key-mobile_navigation [role="radiogroup"] label:has(input:checked) {
-        background: #303321;
-        border-color: #D8F078;
-        color: #D8F078;
-    }
-
-    .st-key-mobile_navigation [role="radiogroup"] label p {
-        font-size: 12px !important;
-        margin: 0;
-        white-space: normal;
-    }
-
-    .st-key-mobile_navigation > div > label {
-        display: none;
-    }
-
-    footer {
-        display: none !important;
-    }
-
-    .hero {
-        padding: 15px 0 20px;
-    }
-
-    .hero h1 {
-        font-size: 36px;
-        line-height: 1.08;
-    }
-
-    h1 {
-        font-size: 29px !important;
-        line-height: 1.15 !important;
-    }
-
-    h2 {
-        font-size: 23px !important;
-    }
-
+    .block-container { padding: 16px 14px 48px; }
+    [data-testid="stRadio"] [role="radiogroup"] { justify-content: flex-start; }
+    [data-testid="stRadio"] label { padding: 7px 12px; }
+    .hero { padding: 28px 0 24px; }
+    .flow { grid-template-columns: 1fr 1fr; }
+    .role-card { min-height: 0; }
     [data-testid="stTextInput"] input,
-    [data-testid="stTextArea"] textarea,
-    [data-testid="stSelectbox"] [data-baseweb="select"] {
-        border-radius: 10px;
-        font-size: 16px;
-    }
-
-    [data-testid="stFormSubmitButton"] button {
-        width: 100%;
-        min-height: 48px;
-        border-radius: 10px;
-        font-weight: 700;
-    }
-
-    div.stButton > button {
-        min-height: 44px;
-        border-radius: 10px;
-    }
-
-    [data-testid="stExpander"] {
-        border: 1px solid #34363D;
-        border-radius: 12px;
-        overflow: hidden;
-    }
-
-    [data-testid="stMetric"] {
-        background: #191B20;
-        border: 1px solid #34363D;
-        border-radius: 10px;
-        padding: 12px;
-    }
-
-    .stMarkdown,
-    [data-testid="stVerticalBlock"] {
-        max-width: 100%;
-    }
+    [data-testid="stTextArea"] textarea { font-size: 16px; }
 }
 </style>
 """, unsafe_allow_html=True)
 
 
 # ============================================================
-# ИНИЦИАЛИЗАЦИЯ
+# ИНИЦИАЛИЗАЦИЯ И ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 # ============================================================
 
 init_db()
+
+NAV_ITEMS = ["Главная", "Авторам", "Продюсерам", "Продвижение", "Команда"]
+
+
+def go_to(page_name):
+    """Переход между разделами (вызывается как on_click-колбэк)."""
+    st.session_state["nav"] = page_name
 
 
 def get_ai_credentials():
@@ -257,111 +515,196 @@ def normalize_genre(value):
     return " ".join(str(value).casefold().strip().split())
 
 
+def esc(value):
+    """Экранирует пользовательский текст перед вставкой в HTML."""
+    return html.escape(str(value if value is not None else ""))
+
+
+def safe_url(url):
+    """Возвращает ссылку, только если это http(s)."""
+    url = str(url or "").strip()
+    parsed = urlparse(url)
+    if parsed.scheme in ("http", "https") and parsed.netloc:
+        return url
+    return ""
+
+
+def page_header(eyebrow, title, text):
+    st.markdown(
+        f"""
+        <div class="page-head">
+            <div class="eyebrow">{esc(eyebrow)}</div>
+            <h2>{esc(title)}</h2>
+            <p>{esc(text)}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def form_section(title):
+    st.markdown(
+        f'<div class="form-section">{esc(title)}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def chips_html(items, gold=False):
+    items = [i for i in items if str(i).strip()]
+    if not items:
+        return ""
+    cls = "chip gold" if gold else "chip"
+    inner = "".join(f'<span class="{cls}">{esc(i)}</span>' for i in items)
+    return f'<div class="chips">{inner}</div>'
+
+
+def info_block(title, value, as_chips=False):
+    """HTML-блок «заголовок + содержимое» для AI-анализа."""
+    if isinstance(value, str):
+        value = value.strip()
+
+    if not value:
+        body = '<div class="block-empty">Нет данных</div>'
+    elif isinstance(value, list):
+        if as_chips:
+            body = chips_html(value, gold=True)
+        else:
+            body = (
+                '<ul class="block-list">'
+                + "".join(f"<li>{esc(i)}</li>" for i in value)
+                + "</ul>"
+            )
+    else:
+        body = f'<p class="block-text">{esc(value)}</p>'
+
+    return f'<div class="block-title">{esc(title)}</div>{body}'
+
+
+def score_color(score):
+    if score >= 75:
+        return "var(--good)"
+    if score >= 50:
+        return "var(--warn)"
+    return "var(--bad)"
+
+
+def meta_line(project):
+    parts = [
+        project.get("director"),
+        project.get("genre"),
+        project.get("format"),
+        project.get("stage"),
+    ]
+    return " · ".join(esc(p) for p in parts if p)
+
+
+def stat_card(number, label):
+    return (
+        f'<div class="stat"><div class="num">{esc(number)}</div>'
+        f'<div class="label">{esc(label)}</div></div>'
+    )
+
+
 # ============================================================
 # ОТОБРАЖЕНИЕ AI-АНАЛИЗА
 # ============================================================
 
 def show_analysis(analysis, author_genre=None):
+    analysis = analysis or {}
     status = analysis.get("status", "")
 
     if status == "success":
-        st.success("AI-анализ выполнен")
-
+        st.markdown(
+            '<span class="badge ok">✓ AI-анализ выполнен</span>',
+            unsafe_allow_html=True,
+        )
     elif status == "unavailable":
-        st.info(
-            "AI пока не подключён. "
-            "Проект сохранён без AI-анализа."
+        st.markdown(
+            '<span class="badge info">AI не подключён — проект '
+            'сохранён без анализа</span>',
+            unsafe_allow_html=True,
         )
-
     else:
-        st.warning(
-            "AI-анализ не удался. "
-            "Проект можно сохранить без него."
+        st.markdown(
+            '<span class="badge err">AI-анализ не удался — проект '
+            'можно сохранить без него</span>',
+            unsafe_allow_html=True,
         )
 
-        error_text = str(
-            analysis.get("error", "Причина не передана")
-        )
-
+        error_text = str(analysis.get("error", "Причина не передана"))
         credentials = get_ai_credentials()
 
         if credentials:
-            error_text = error_text.replace(
-                credentials,
-                "[ключ скрыт]",
-            )
+            error_text = error_text.replace(credentials, "[ключ скрыт]")
 
-        st.caption("Техническая причина ошибки:")
-        st.code(error_text[:1200])
+        with st.expander("Техническая причина ошибки"):
+            st.code(error_text[:1200])
 
     if analysis.get("summary"):
-        st.write(analysis["summary"])
+        st.markdown(
+            f'<div class="callout">{esc(analysis["summary"])}</div>',
+            unsafe_allow_html=True,
+        )
 
-    if (
-        status == "success"
-        and author_genre
-        and author_genre != "Другое"
-    ):
+    if status == "success" and author_genre and author_genre != "Другое":
         ai_genres = analysis.get("genres", [])
 
         if isinstance(ai_genres, str):
             ai_genres = [ai_genres]
 
-        author_genre_normalized = normalize_genre(
-            author_genre
-        )
+        author_norm = normalize_genre(author_genre)
+        ai_norm = [normalize_genre(item) for item in ai_genres]
 
-        ai_genres_normalized = [
-            normalize_genre(item)
-            for item in ai_genres
-        ]
-
-        if author_genre_normalized not in ai_genres_normalized:
-            st.warning(
-                f"Жанровые характеристики различаются: "
-                f"вы указали «{author_genre}», "
-                f"а AI не включил этот жанр в свой список."
-            )
-
-            st.caption(
-                "Это не обязательно ошибка. AI предлагает "
-                "дополнительную интерпретацию, а выбранный "
-                "вами жанр остаётся основным. При необходимости "
-                "проверьте описание и жанровую разметку проекта."
+        if author_norm not in ai_norm:
+            st.markdown(
+                f"""
+                <div class="callout">
+                    Жанровые характеристики различаются: вы указали
+                    «{esc(author_genre)}», а AI не включил этот жанр
+                    в свой список.
+                    <small>Это не обязательно ошибка: AI предлагает
+                    дополнительную интерпретацию, а выбранный вами жанр
+                    остаётся основным.</small>
+                </div>
+                """,
+                unsafe_allow_html=True,
             )
         else:
-            st.success(
-                "AI-анализ учитывает выбранный вами жанр."
+            st.markdown(
+                '<span class="badge ok">AI-анализ учитывает выбранный '
+                'вами жанр</span>',
+                unsafe_allow_html=True,
             )
 
-    columns = st.columns(2)
+    left, right = st.columns(2)
 
-    fields = [
-        ("Жанры по версии AI", "genres"),
-        ("Оценка выбранного автором жанра", "genre_assessment"),
-        ("Что в тексте указывает на жанр", "genre_evidence"),
-        ("Дополнительные жанровые трактовки", "genre_alternatives"),
-        ("Темы", "themes"),
-        ("Сильные стороны", "strengths"),
-        ("Риски", "risks"),
-        ("Аудитория", "audience"),
-        ("Рекомендации", "recommendations"),
-    ]
+    with left:
+        st.markdown(
+            info_block("Жанры по версии AI", analysis.get("genres", []), True)
+            + info_block("Темы", analysis.get("themes", []), True)
+            + info_block(
+                "Оценка выбранного автором жанра",
+                analysis.get("genre_assessment", ""),
+            )
+            + info_block(
+                "Что в тексте указывает на жанр",
+                analysis.get("genre_evidence", []),
+            )
+            + info_block(
+                "Дополнительные жанровые трактовки",
+                analysis.get("genre_alternatives", []),
+            ),
+            unsafe_allow_html=True,
+        )
 
-    for index, (title, key) in enumerate(fields):
-        with columns[index % 2]:
-            value = analysis.get(key, [])
-
-            st.markdown(f"**{title}**")
-
-            if isinstance(value, list):
-                if value:
-                    for item in value:
-                        st.write(f"• {item}")
-                else:
-                    st.caption("Нет данных")
-            else:
-                st.write(value or "Нет данных")
+    with right:
+        st.markdown(
+            info_block("Аудитория", analysis.get("audience", ""))
+            + info_block("Сильные стороны", analysis.get("strengths", []))
+            + info_block("Риски", analysis.get("risks", []))
+            + info_block("Рекомендации", analysis.get("recommendations", [])),
+            unsafe_allow_html=True,
+        )
 
 
 # ============================================================
@@ -374,45 +717,75 @@ def page_home():
 
     st.markdown("""
     <div class="hero">
-        <div class="eyebrow">NEWS MEDIA HOLDING PRESENTS</div>
-        <h1>Истории, которые<br>найдут своих людей.</h1>
+        <div class="eyebrow">News Media Holding presents</div>
+        <h1>Истории, которые<br><em>найдут своих людей.</em></h1>
         <p>
-        Кинобюро объединяет независимых режиссёров,
-        продюсеров и команды, которым нужны новые
-        истории и возможности для сотрудничества.
+        Кинобюро объединяет независимых режиссёров, продюсеров и
+        медиакоманды: AI помогает быстро находить проекты под задачу,
+        а NMH — вывести фильм к аудитории.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns(3)
+    c1, c2, c3 = st.columns(3)
+    c1.markdown(stat_card(len(projects), "проектов в базе"),
+                unsafe_allow_html=True)
+    c2.markdown(stat_card(len(campaigns), "заявок на продвижение"),
+                unsafe_allow_html=True)
+    c3.markdown(stat_card("3", "формата сотрудничества"),
+                unsafe_allow_html=True)
 
-    col1.metric("Проекты в базе", len(projects))
-    col2.metric("Заявки на продвижение", len(campaigns))
-    col3.metric("Форматы сотрудничества", "3")
+    st.markdown('<div class="section-title">С чего начать</div>',
+                unsafe_allow_html=True)
 
-    st.markdown("---")
-    st.markdown("### Три направления работы")
+    cards = [
+        ("01 / Авторам", "Покажите проект",
+         "Отправьте синопсис и материалы — AI разберёт жанр, темы, "
+         "аудиторию и даст рекомендации.",
+         "Подать проект", "Авторам"),
+        ("02 / Продюсерам", "Найдите историю",
+         "Опишите задачу своими словами — AI ранжирует проекты по "
+         "смыслу и объяснит выбор.",
+         "Открыть поиск", "Продюсерам"),
+        ("03 / Студиям", "Выведите фильм к зрителю",
+         "Обсудите продвижение через медиаресурсы холдинга и "
+         "пакеты медиаподдержки.",
+         "Заявка на продвижение", "Продвижение"),
+    ]
 
-    col1, col2, col3 = st.columns(3)
+    for column, (idx, title, text, button, target) in zip(
+        st.columns(3), cards
+    ):
+        with column:
+            st.markdown(
+                f"""
+                <div class="role-card">
+                    <div class="idx">{esc(idx)}</div>
+                    <h4>{esc(title)}</h4>
+                    <p>{esc(text)}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.button(
+                button,
+                key=f"home_cta_{target}",
+                on_click=go_to,
+                args=(target,),
+                use_container_width=True,
+            )
 
-    with col1:
-        st.markdown("#### 01 / Авторам")
-        st.write(
-            "Расскажите о своём проекте и покажите портфолио."
-        )
+    st.markdown('<div class="section-title">Как это работает</div>',
+                unsafe_allow_html=True)
 
-    with col2:
-        st.markdown("#### 02 / Продюсерам")
-        st.write(
-            "Ищите режиссёров и проекты с помощью AI."
-        )
-
-    with col3:
-        st.markdown("#### 03 / Студиям")
-        st.write(
-            "Обсудите продвижение независимого фильма "
-            "с медиахолдингом."
-        )
+    st.markdown("""
+    <div class="flow">
+        <div><b>1. Заявка</b>Автор подаёт проект и материалы</div>
+        <div><b>2. AI-анализ</b>Жанр, темы, аудитория, риски</div>
+        <div><b>3. Подбор</b>Продюсер получает ранжированный список</div>
+        <div><b>4. Продвижение</b>Платная поддержка через медиа NMH</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # ============================================================
@@ -420,14 +793,16 @@ def page_home():
 # ============================================================
 
 def page_director():
-    st.markdown("## Заявка режиссёра")
-
-    st.write(
-        "Расскажите о проекте. Чем подробнее описание, "
-        "тем полезнее будет AI-анализ."
+    page_header(
+        "Авторам",
+        "Заявка режиссёра",
+        "Расскажите о проекте. Чем подробнее описание, тем полезнее "
+        "будет AI-анализ.",
     )
 
     with st.form("director_form"):
+        form_section("О проекте")
+
         name = st.text_input("Название проекта *")
         director = st.text_input("Имя режиссёра *")
 
@@ -439,6 +814,8 @@ def page_director():
                 "Что делает её особенной?"
             ),
         )
+
+        form_section("Параметры")
 
         col1, col2 = st.columns(2)
 
@@ -485,6 +862,8 @@ def page_director():
                 "Ссылка на портфолио или фильм"
             )
 
+        form_section("Контакты и материалы")
+
         contact = st.text_input("Контакт для связи *")
 
         uploaded_file = st.file_uploader(
@@ -502,113 +881,205 @@ def page_director():
             use_container_width=True,
         )
 
-    if submitted:
-        if (
-            not name.strip()
-            or not director.strip()
-            or not synopsis.strip()
-            or not contact.strip()
-        ):
-            st.error("Заполните все обязательные поля.")
+    if not submitted:
+        return
+
+    if (
+        not name.strip()
+        or not director.strip()
+        or not synopsis.strip()
+        or not contact.strip()
+    ):
+        st.error("Заполните все обязательные поля.")
+        return
+
+    project_text = synopsis
+
+    if uploaded_file is not None:
+        try:
+            file_text = extract_text(uploaded_file)
+            project_text += (
+                "\n\nДополнительные материалы:\n" + file_text
+            )
+        except Exception as error:
+            st.error(f"Не удалось обработать файл: {error}")
             return
 
-        project_text = synopsis
+    with st.spinner("Анализируем проект с помощью AI..."):
+        analysis = analyze_project(
+            project_text,
+            credentials=get_ai_credentials(),
+            author_genre=genre,
+        )
 
-        if uploaded_file is not None:
-            try:
-                file_text = extract_text(uploaded_file)
-                project_text += (
-                    "\n\nДополнительные материалы:\n"
-                    + file_text
-                )
-            except Exception as error:
-                st.error(
-                    f"Не удалось обработать файл: {error}"
-                )
-                return
+    project = {
+        "name": name.strip(),
+        "director": director.strip(),
+        "synopsis": synopsis.strip(),
+        "genre": genre,
+        "format": project_format,
+        "stage": stage,
+        "portfolio_url": portfolio_url.strip(),
+        "contact": contact.strip(),
+        "analysis": analysis,
+    }
 
-        with st.spinner("Анализируем проект с помощью AI..."):
-            analysis = analyze_project(
-                project_text,
-                credentials=get_ai_credentials(),
-                author_genre=genre,
-            )
+    try:
+        project_id = save_project(project)
+    except Exception as error:
+        st.error(f"Не удалось сохранить проект: {error}")
+        return
 
-        project = {
-            "name": name.strip(),
-            "director": director.strip(),
-            "synopsis": synopsis.strip(),
-            "genre": genre,
-            "format": project_format,
-            "stage": stage,
-            "portfolio_url": portfolio_url.strip(),
-            "contact": contact.strip(),
-            "analysis": analysis,
-        }
+    st.success(
+        f"Проект «{name}» сохранён. Номер заявки: {project_id}"
+    )
 
-        try:
-            project_id = save_project(project)
+    st.markdown(
+        '<div class="section-title">Результат AI-анализа</div>',
+        unsafe_allow_html=True,
+    )
+    show_analysis(analysis, author_genre=genre)
 
-            st.success(
-                f"Проект «{name}» сохранён. "
-                f"Номер заявки: {project_id}"
-            )
+    st.markdown(
+        '<div class="section-title">Развивать проект вместе с NMH?</div>',
+        unsafe_allow_html=True,
+    )
+    st.write(
+        "Команда Кинобюро может рассмотреть информационную поддержку "
+        "и продвижение вашего фильма."
+    )
 
-            show_analysis(
-                analysis,
-                author_genre=genre,
-            )
+    # Данные для предзаполнения сохраняем до перехода
+    st.session_state["campaign_prefill"] = {
+        "film_name": name.strip(),
+        "company": director.strip(),
+        "description": synopsis.strip(),
+        "audience": str(analysis.get("audience", "")),
+        "contact": contact.strip(),
+    }
 
-            st.markdown("---")
-            st.markdown("### Хотите развивать проект вместе с NMH?")
-
-            st.write(
-                "Команда Кинобюро может рассмотреть возможности "
-                "информационной поддержки и продвижения вашего фильма."
-            )
-
-            if st.button(
-                "Перейти к заявке на продвижение",
-                type="primary",
-                key="director_campaign_link",
-            ):
-                st.session_state["campaign_prefill"] = {
-                    "film_name": name.strip(),
-                    "company": director.strip(),
-                    "description": synopsis.strip(),
-                    "audience": analysis.get("audience", ""),
-                    "contact": contact.strip(),
-                }
-
-                st.session_state["mobile_navigation"] = (
-                    "↗ Продвиж."
-                )
-                st.rerun()
-
-        except Exception as error:
-            st.error(
-                f"Не удалось сохранить проект: {error}"
-            )
+    st.button(
+        "Перейти к заявке на продвижение",
+        type="primary",
+        key="director_campaign_link",
+        on_click=go_to,
+        args=("Продвижение",),
+    )
 
 
 # ============================================================
 # AI-ПОИСК ПРОЕКТОВ ДЛЯ ПРОДЮСЕРА
 # ============================================================
 
-def page_producer():
-    st.markdown("## AI-поиск проектов")
+def render_result_card(project, current_producer):
+    score = int(project.get("score", 0))
+    score = max(0, min(100, score))
 
-    st.write(
-        "Опишите задачу продюсера. GigaChat проанализирует "
-        "проекты и объяснит, какие из них лучше соответствуют запросу."
+    with st.container(border=True, key=f"result_{project['id']}"):
+        st.markdown(
+            f"""
+            <div class="project-title">{esc(project.get("name", ""))}</div>
+            <div class="project-meta">{meta_line(project)}</div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.write(project.get("synopsis", ""))
+
+        st.markdown(
+            f"""
+            <div class="score">
+                <div class="score-top">
+                    <span>Соответствие запросу по оценке AI</span>
+                    <b>{score} / 100</b>
+                </div>
+                <div class="bar"><i style="width:{score}%;
+                    background:{score_color(score)}"></i></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        if project.get("fit_summary"):
+            st.markdown(
+                f'<div class="callout">{esc(project["fit_summary"])}</div>',
+                unsafe_allow_html=True,
+            )
+
+        left, right = st.columns(2)
+
+        with left:
+            if project.get("reasons"):
+                st.markdown(
+                    info_block(
+                        "Почему AI рекомендует проект",
+                        project["reasons"],
+                    ),
+                    unsafe_allow_html=True,
+                )
+
+        with right:
+            if project.get("concerns"):
+                st.markdown(
+                    info_block(
+                        "Что стоит проверить",
+                        project["concerns"],
+                    ),
+                    unsafe_allow_html=True,
+                )
+
+        analysis = project.get("analysis", {})
+
+        if (
+            isinstance(analysis, dict)
+            and analysis.get("status") == "success"
+        ):
+            with st.expander("Полный AI-анализ проекта"):
+                show_analysis(
+                    analysis,
+                    author_genre=project.get("genre"),
+                )
+
+        actions = st.columns([1, 1, 2])
+
+        link = safe_url(project.get("portfolio_url"))
+
+        if link:
+            with actions[0]:
+                st.link_button("Портфолио", link)
+
+        if current_producer:
+            with actions[1]:
+                if st.button(
+                    "★ В избранное",
+                    key=f"save_{project['id']}",
+                ):
+                    try:
+                        save_project_to_favorites(
+                            project["id"],
+                            current_producer,
+                        )
+                        st.success("Добавлено в избранное.")
+                    except Exception as error:
+                        st.error(
+                            f"Не удалось сохранить проект: {error}"
+                        )
+
+
+def page_producer():
+    page_header(
+        "Продюсерам",
+        "AI-поиск проектов",
+        "Опишите задачу своими словами. GigaChat проанализирует проекты "
+        "и объяснит, какие из них лучше соответствуют запросу.",
     )
 
     projects = get_projects()
 
     if not projects:
         st.info(
-            "Пока в базе нет проектов. Первым можно добавить "
-            "проект через раздел «Авторам»."
+            "Пока в базе нет проектов. Первым можно добавить проект "
+            "через раздел «Авторам»."
         )
         return
 
@@ -616,25 +1087,29 @@ def page_producer():
         query = st.text_area(
             "Что вы ищете?",
             placeholder=(
-                "Например: ищу комедийный проект для молодой "
-                "аудитории, с потенциалом для онлайн-платформы..."
+                "Например: ищу комедийный проект для молодой аудитории "
+                "с потенциалом для онлайн-платформы..."
             ),
             height=120,
         )
 
-        search_genre = st.text_input(
-            "Желаемые жанры",
-            placeholder="Комедия, драма",
-        )
+        col1, col2 = st.columns(2)
 
-        search_themes = st.text_input(
-            "Темы и мотивы",
-            placeholder="Взросление, семья, отношения",
-        )
+        with col1:
+            search_genre = st.text_input(
+                "Желаемые жанры",
+                placeholder="Комедия, драма",
+            )
+
+        with col2:
+            search_themes = st.text_input(
+                "Темы и мотивы",
+                placeholder="Взросление, семья, отношения",
+            )
 
         producer_id = st.text_input(
             "Ваш контакт или рабочий идентификатор",
-            placeholder="Например, email",
+            placeholder="Например, email — нужен для избранного",
         )
 
         submitted = st.form_submit_button(
@@ -675,10 +1150,7 @@ def page_producer():
             st.session_state.pop("search_results", None)
 
             error_text = str(
-                ai_response.get(
-                    "error",
-                    "Неизвестная ошибка",
-                )
+                ai_response.get("error", "Неизвестная ошибка")
             )
 
             credentials = get_ai_credentials()
@@ -694,8 +1166,8 @@ def page_producer():
                 "Попробуйте повторить запрос."
             )
 
-            st.caption("Техническая причина:")
-            st.code(error_text[:1000])
+            with st.expander("Техническая причина"):
+                st.code(error_text[:1000])
             return
 
         original_projects = {
@@ -711,10 +1183,7 @@ def page_producer():
                 {},
             )
 
-            enriched_results.append({
-                **original,
-                **item,
-            })
+            enriched_results.append({**original, **item})
 
         st.session_state["search_results"] = enriched_results
         st.session_state["producer_id"] = producer_id.strip()
@@ -723,109 +1192,23 @@ def page_producer():
     results = st.session_state.get("search_results", [])
 
     if results:
-        st.markdown("---")
-        st.markdown("### Результаты AI-подбора")
+        st.markdown(
+            '<div class="section-title">Результаты AI-подбора</div>',
+            unsafe_allow_html=True,
+        )
 
         st.caption(
-            "Рейтинг сформирован GigaChat-2 на основе "
-            "смыслового соответствия запросу и характеристик проектов."
+            f"Проанализировано проектов: {len(results)}. Рейтинг "
+            "сформирован GigaChat-2 по смысловому соответствию запросу."
         )
 
-        st.markdown(
-            f"**Проанализировано проектов: {len(results)}**"
-        )
+        current_producer = st.session_state.get("producer_id", "")
 
         for project in results:
-            with st.container(border=True):
-                st.markdown(f"### {project['name']}")
-
-                st.caption(
-                    f"{project.get('director', 'Автор')} · "
-                    f"{project.get('genre', 'Жанр не указан')} · "
-                    f"{project.get('format', 'Формат не указан')} · "
-                    f"{project.get('stage', 'Стадия не указана')}"
-                )
-
-                st.write(project.get("synopsis", ""))
-
-                st.markdown(
-                    f"**Оценка соответствия по мнению AI: "
-                    f"{project['score']} / 100**"
-                )
-
-                st.progress(
-                    min(project["score"] / 100, 1.0)
-                )
-
-                if project.get("fit_summary"):
-                    st.write(project["fit_summary"])
-
-                if project.get("reasons"):
-                    st.markdown(
-                        "**Почему AI рекомендует проект:**"
-                    )
-
-                    for reason in project["reasons"]:
-                        st.write(f"• {reason}")
-
-                if project.get("concerns"):
-                    st.markdown(
-                        "**Что стоит дополнительно проверить:**"
-                    )
-
-                    for concern in project["concerns"]:
-                        st.write(f"• {concern}")
-
-                if project.get("portfolio_url"):
-                    st.markdown(
-                        f"[Открыть портфолио]"
-                        f"({project['portfolio_url']})"
-                    )
-
-                analysis = project.get("analysis", {})
-
-                if (
-                    isinstance(analysis, dict)
-                    and analysis.get("status") == "success"
-                ):
-                    with st.expander(
-                        "Посмотреть полный AI-анализ проекта"
-                    ):
-                        show_analysis(
-                            analysis,
-                            author_genre=project.get("genre"),
-                        )
-
-                current_producer = st.session_state.get(
-                    "producer_id",
-                    "",
-                )
-
-                if current_producer:
-                    if st.button(
-                        "Сохранить в избранное",
-                        key=f"save_{project['id']}",
-                    ):
-                        try:
-                            save_project_to_favorites(
-                                project["id"],
-                                current_producer,
-                            )
-
-                            st.success(
-                                "Проект добавлен в избранное."
-                            )
-
-                        except Exception as error:
-                            st.error(
-                                "Не удалось сохранить проект: "
-                                f"{error}"
-                            )
+            render_result_card(project, current_producer)
 
     elif st.session_state.get("search_query"):
-        st.info(
-            "AI не вернул проекты для отображения."
-        )
+        st.info("AI не вернул проекты для отображения.")
 
 
 # ============================================================
@@ -833,19 +1216,18 @@ def page_producer():
 # ============================================================
 
 def page_campaign():
-    st.markdown("## Продвижение фильма")
-
-    st.write(
-        "Расскажите о фильме и задачах продвижения. "
-        "Команда Кинобюро сможет оценить возможные форматы сотрудничества."
+    page_header(
+        "Студиям",
+        "Продвижение фильма",
+        "Расскажите о фильме и задачах продвижения. Команда Кинобюро "
+        "оценит возможные форматы сотрудничества.",
     )
 
-    prefill = st.session_state.get(
-        "campaign_prefill",
-        {},
-    )
+    prefill = st.session_state.get("campaign_prefill", {})
 
     with st.form("campaign_form"):
+        form_section("Фильм")
+
         film_name = st.text_input(
             "Название фильма *",
             value=prefill.get("film_name", ""),
@@ -856,10 +1238,19 @@ def page_campaign():
             value=prefill.get("company", ""),
         )
 
-        release_date = st.text_input(
-            "Планируемая дата релиза",
-            placeholder="Например, весна 2027",
-        )
+        col1, col2 = st.columns(2)
+
+        with col1:
+            release_date = st.text_input(
+                "Планируемая дата релиза",
+                placeholder="Например, весна 2027",
+            )
+
+        with col2:
+            budget = st.text_input(
+                "Бюджет продвижения",
+                placeholder="Диапазон или «обсуждается»",
+            )
 
         audience = st.text_area(
             "Целевая аудитория",
@@ -867,23 +1258,16 @@ def page_campaign():
             placeholder="Для кого этот фильм?",
         )
 
-        budget = st.text_input(
-            "Предполагаемый бюджет продвижения",
-            placeholder=(
-                "Можно указать диапазон "
-                "или написать «обсуждается»"
-            ),
-        )
-
         description = st.text_area(
             "Задачи и материалы",
             value=prefill.get("description", ""),
             height=140,
             placeholder=(
-                "Какая поддержка нужна? "
-                "Какие материалы уже готовы?"
+                "Какая поддержка нужна? Какие материалы уже готовы?"
             ),
         )
+
+        form_section("Контакты")
 
         contact = st.text_input(
             "Контактное лицо и способ связи *",
@@ -896,154 +1280,145 @@ def page_campaign():
             use_container_width=True,
         )
 
-    if submitted:
-        if (
-            not film_name.strip()
-            or not company.strip()
-            or not contact.strip()
-        ):
-            st.error("Заполните обязательные поля.")
-            return
+    if not submitted:
+        return
 
-        try:
-            campaign_id = save_campaign({
-                "film_name": film_name.strip(),
-                "company": company.strip(),
-                "release_date": release_date.strip(),
-                "audience": audience.strip(),
-                "budget": budget.strip(),
-                "description": description.strip(),
-                "contact": contact.strip(),
-            })
+    if (
+        not film_name.strip()
+        or not company.strip()
+        or not contact.strip()
+    ):
+        st.error("Заполните обязательные поля.")
+        return
 
-            st.success(
-                f"Заявка принята. Номер заявки: {campaign_id}"
-            )
+    try:
+        campaign_id = save_campaign({
+            "film_name": film_name.strip(),
+            "company": company.strip(),
+            "release_date": release_date.strip(),
+            "audience": audience.strip(),
+            "budget": budget.strip(),
+            "description": description.strip(),
+            "contact": contact.strip(),
+        })
 
-            st.session_state.pop(
-                "campaign_prefill",
-                None,
-            )
+        st.success(f"Заявка принята. Номер заявки: {campaign_id}")
+        st.session_state.pop("campaign_prefill", None)
 
-        except Exception as error:
-            st.error(
-                f"Не удалось сохранить заявку: {error}"
-            )
+    except Exception as error:
+        st.error(f"Не удалось сохранить заявку: {error}")
 
 
 # ============================================================
-# ОТКРЫТАЯ ПАНЕЛЬ КОМАНДЫ NMH
+# ПАНЕЛЬ КОМАНДЫ NMH
 # ============================================================
 
 def page_admin():
-    st.markdown("## Панель команды Кинобюро")
+    page_header(
+        "Команда NMH",
+        "Панель Кинобюро",
+        "Все проекты авторов и заявки на продвижение в одном месте.",
+    )
 
     projects = get_projects()
     campaigns = get_campaigns()
 
-    col1, col2 = st.columns(2)
+    c1, c2 = st.columns(2)
+    c1.markdown(stat_card(len(projects), "всего проектов"),
+                unsafe_allow_html=True)
+    c2.markdown(stat_card(len(campaigns), "заявок на продвижение"),
+                unsafe_allow_html=True)
 
-    col1.metric("Всего проектов", len(projects))
-    col2.metric("Заявок на продвижение", len(campaigns))
+    st.write("")
 
-    st.markdown("### Проекты режиссёров")
+    tab_projects, tab_campaigns = st.tabs([
+        f"Проекты ({len(projects)})",
+        f"Заявки ({len(campaigns)})",
+    ])
 
-    if not projects:
-        st.info("Проектов пока нет.")
+    with tab_projects:
+        if not projects:
+            st.info("Проектов пока нет.")
 
-    else:
         for project in projects:
             with st.expander(
-                f"{project['name']} — {project['director']}"
+                f"{project.get('name', '—')} — "
+                f"{project.get('director', '—')}"
             ):
-                st.write(project["synopsis"])
-
-                st.caption(
-                    f"{project['genre']} · "
-                    f"{project['format']} · "
-                    f"{project['stage']}"
+                st.markdown(
+                    f'<div class="project-meta">{meta_line(project)}'
+                    "</div>",
+                    unsafe_allow_html=True,
                 )
 
-                st.write(
-                    f"Контакт: {project['contact']}"
+                st.write(project.get("synopsis", ""))
+
+                st.markdown(
+                    info_block("Контакт", project.get("contact", "")),
+                    unsafe_allow_html=True,
                 )
 
-                if project.get("portfolio_url"):
-                    st.markdown(
-                        f"[Портфолио]({project['portfolio_url']})"
-                    )
+                link = safe_url(project.get("portfolio_url"))
+                if link:
+                    st.link_button("Портфолио", link)
+
+                st.markdown("---")
 
                 show_analysis(
                     project.get("analysis", {}),
                     author_genre=project.get("genre"),
                 )
 
-    st.markdown("---")
-    st.markdown("### Заявки на продвижение")
+    with tab_campaigns:
+        if not campaigns:
+            st.info("Заявок на продвижение пока нет.")
 
-    if not campaigns:
-        st.info(
-            "Заявок на продвижение пока нет."
-        )
-
-    else:
         for campaign in campaigns:
             with st.expander(
-                f"{campaign['film_name']} — {campaign['company']}"
+                f"{campaign.get('film_name', '—')} — "
+                f"{campaign.get('company', '—')}"
             ):
-                st.write(
-                    campaign.get("description", "")
-                )
+                st.write(campaign.get("description", ""))
 
-                st.write(
-                    f"Релиз: {campaign.get('release_date', '')}"
-                )
+                left, right = st.columns(2)
 
-                st.write(
-                    f"Аудитория: {campaign.get('audience', '')}"
-                )
+                with left:
+                    st.markdown(
+                        info_block("Релиз", campaign.get("release_date", ""))
+                        + info_block("Бюджет", campaign.get("budget", "")),
+                        unsafe_allow_html=True,
+                    )
 
-                st.write(
-                    f"Бюджет: {campaign.get('budget', '')}"
-                )
-
-                st.write(
-                    f"Контакт: {campaign.get('contact', '')}"
-                )
+                with right:
+                    st.markdown(
+                        info_block("Аудитория", campaign.get("audience", ""))
+                        + info_block("Контакт", campaign.get("contact", "")),
+                        unsafe_allow_html=True,
+                    )
 
 
 # ============================================================
 # НАВИГАЦИЯ
 # ============================================================
 
-with st.sidebar:
-    st.markdown("## NMH")
-    st.caption("КИНОБЮРО")
-    st.markdown("---")
-    st.caption(
-        "Платформа поиска и развития независимого кино"
+brand_col, nav_col = st.columns([1.1, 3])
+
+with brand_col:
+    st.markdown(
+        '<div class="brand"><b>NMH</b><span>КИНОБЮРО</span></div>',
+        unsafe_allow_html=True,
     )
 
+with nav_col:
+    page = st.radio(
+        "Навигация",
+        NAV_ITEMS,
+        horizontal=True,
+        label_visibility="collapsed",
+        key="nav",
+    )
 
-navigation = {
-    "⌂ Главная": "Главная",
-    "＋ Авторам": "Авторам",
-    "⌕ Поиск": "Продюсерам",
-    "↗ Продвиж.": "Продвижение фильма",
-    "◯ Команда": "Команда NMH",
-}
-
-
-selected_navigation = st.radio(
-    "Навигация",
-    list(navigation.keys()),
-    horizontal=True,
-    label_visibility="collapsed",
-    key="mobile_navigation",
-)
-
-
-page = navigation[selected_navigation]
+st.markdown('<div class="nav-divider"></div>', unsafe_allow_html=True)
 
 
 if page == "Главная":
@@ -1055,8 +1430,8 @@ elif page == "Авторам":
 elif page == "Продюсерам":
     page_producer()
 
-elif page == "Продвижение фильма":
+elif page == "Продвижение":
     page_campaign()
 
-elif page == "Команда NMH":
+elif page == "Команда":
     page_admin()
