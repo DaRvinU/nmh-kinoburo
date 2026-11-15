@@ -1,0 +1,282 @@
+
+import os
+from typing import Optional
+
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+from backend.ai import analyze_project, rank_projects_ai
+from backend.db import (
+    get_projects,
+    save_project,
+    save_project_to_favorites,
+    save_campaign,
+    get_campaigns,
+)
+from backend.files import extract_text
+
+
+app = FastAPI(
+    title="NMH Кинобюро API",
+    version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
+
+
+class SearchRequest(BaseModel):
+    query: str
+    genres: list[str] = []
+    themes: list[str] = []
+    producer_id: str = ""
+
+
+class FavoriteRequest(BaseModel):
+    project_id: str
+    producer_id: str
+
+
+class CampaignRequest(BaseModel):
+    film_name: str
+    company: str
+    release_date: str = ""
+    audience: str = ""
+    budget: str = ""
+    description: str = ""
+    contact: str
+
+
+@app.get("/api/health")
+def health():
+    return {
+        "status": "ok",
+        "service": "NMH Кинобюро",
+    }
+
+
+@app.get("/api/projects")
+def projects_list():
+    try:
+        return get_projects()
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Не удалось загрузить проекты: {error}",
+        )
+
+
+@app.post("/api/projects")
+async def create_project(
+    name: str = Form(...),
+    director: str = Form(...),
+    synopsis: str = Form(...),
+    genre: str = Form(...),
+    project_format: str = Form(...),
+    stage: str = Form(...),
+    contact: str = Form(...),
+    logline: str = Form(""),
+    portfolio_url: str = Form(""),
+    uploaded_file: Optional[UploadFile] = File(None),
+):
+    required = [
+        name.strip(),
+        director.strip(),
+        synopsis.strip(),
+        genre.strip(),
+        contact.strip(),
+    ]
+
+    if not all(required):
+        raise HTTPException(
+            status_code=400,
+            detail="Заполните все обязательные поля.",
+        )
+
+    project_text = synopsis.strip()
+
+    if uploaded_file is not None:
+        try:
+            content = await uploaded_file.read()
+
+            class UploadedFileAdapter:
+                def __init__(self, filename, data):
+                    self.name = filename
+                    self._data = data
+
+                def getvalue(self):
+                    return self._data
+
+            adapter = UploadedFileAdapter(
+                uploaded_file.filename or "",
+                content,
+            )
+
+            file_text = extract_text(adapter)
+            project_text += (
+                "\n\nДополнительные материалы:\n" + file_text
+            )
+        except Exception as error:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Не удалось обработать файл: {error}",
+            )
+
+    analysis = analyze_project(
+        project_text,
+        author_genre=genre,
+    )
+
+    project = {
+        "name": name.strip(),
+        "director": director.strip(),
+        "synopsis": synopsis.strip(),
+        "logline": logline.strip(),
+        "genre": genre.strip(),
+        "format": project_format.strip(),
+        "stage": stage.strip(),
+        "portfolio_url": portfolio_url.strip(),
+        "contact": contact.strip(),
+        "analysis": analysis,
+    }
+
+    try:
+        project_id = save_project(project)
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Не удалось сохранить проект: {error}",
+        )
+
+    return {
+        "status": "success",
+        "project_id": project_id,
+        "project": {
+            **project,
+            "id": project_id,
+        },
+        "analysis": analysis,
+    }
+
+
+@app.post("/api/search")
+def search_projects(request: SearchRequest):
+    if not request.query.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Введите поисковый запрос.",
+        )
+
+    try:
+        projects = get_projects()
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Не удалось загрузить проекты: {error}",
+        )
+
+    if not projects:
+        return {
+            "status": "success",
+            "results": [],
+        }
+
+    brief = {
+        "genres": request.genres,
+        "themes": request.themes,
+    }
+
+    result = rank_projects_ai(
+        query=request.query.strip(),
+        projects=projects,
+        brief=brief,
+    )
+
+    if result.get("status") != "success":
+        raise HTTPException(
+            status_code=502,
+            detail=result.get("error", "Ошибка AI-поиска"),
+        )
+
+    return result
+
+
+@app.post("/api/favorites")
+def add_favorite(request: FavoriteRequest):
+    if not request.project_id.strip() or not request.producer_id.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Укажите проект и идентификатор продюсера.",
+        )
+
+    try:
+        save_project_to_favorites(
+            request.project_id,
+            request.producer_id,
+        )
+        return {"status": "success"}
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Не удалось сохранить избранное: {error}",
+        )
+
+
+@app.post("/api/campaigns")
+def create_campaign(request: CampaignRequest):
+    if not request.film_name.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Укажите название фильма.",
+        )
+
+    if not request.company.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Укажите студию или автора.",
+        )
+
+    if not request.contact.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Укажите контакт для связи.",
+        )
+
+    try:
+        campaign_id = save_campaign({
+            "film_name": request.film_name.strip(),
+            "company": request.company.strip(),
+            "release_date": request.release_date.strip(),
+            "audience": request.audience.strip(),
+            "budget": request.budget.strip(),
+            "description": request.description.strip(),
+            "contact": request.contact.strip(),
+        })
+
+        return {
+            "status": "success",
+            "campaign_id": campaign_id,
+        }
+
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Не удалось сохранить заявку: {error}",
+        )
+
+
+@app.get("/api/campaigns")
+def campaigns_list():
+    try:
+        return get_campaigns()
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Не удалось загрузить заявки: {error}",
+        )
