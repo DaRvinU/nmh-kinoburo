@@ -1648,6 +1648,8 @@ def page_admin():
         "Панель Кинобюро",
         "Все проекты авторов и заявки на продвижение в одном месте.",
     )
+    if not check_admin_password():
+        return
 
     projects = get_projects()
     campaigns = get_campaigns()
