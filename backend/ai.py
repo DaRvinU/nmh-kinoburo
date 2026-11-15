@@ -71,23 +71,18 @@ def analyze_project(project_text, credentials=None):
 """
 
     try:
-      with GigaChat(
+        with GigaChat(
             credentials=credentials,
-            model="GigaChat-2",
-            scope="GIGACHAT_API_PERS",
             verify_ssl_certs=False,
-            timeout=60,
         ) as giga:
             response = giga.chat(
                 Chat(
-                    model="GigaChat-2",
                     messages=[
                         Messages(
                             role="user",
                             content=prompt,
                         )
-                    ],
-                    temperature=0.2,
+                    ]
                 )
             )
 
