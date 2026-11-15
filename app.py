@@ -142,8 +142,31 @@ def show_analysis(analysis, author_genre=None):
         st.caption("Техническая причина ошибки:")
         st.code(error_text[:1200])
 
-    if analysis.get("summary"):
+        if analysis.get("summary"):
         st.write(analysis["summary"])
+
+    if status == "success" and author_genre and author_genre != "Другое":
+        ai_genres = analysis.get("genres", [])
+        if isinstance(ai_genres, str):
+            ai_genres = [ai_genres]
+
+        author_genre_normalized = normalize_genre(author_genre)
+        ai_genres_normalized = [normalize_genre(item) for item in ai_genres]
+
+        if author_genre_normalized not in ai_genres_normalized:
+            st.warning(
+                f"Жанровые характеристики различаются: вы указали «{author_genre}», "
+                "а AI не включил этот жанр в свой список."
+            )
+            st.caption(
+                "Это не обязательно ошибка. AI предлагает дополнительную интерпретацию, "
+                "а выбранный вами жанр остаётся основным. При необходимости проверьте "
+                "описание и жанровую разметку проекта."
+            )
+        else:
+            st.success("AI-анализ учитывает выбранный вами жанр.")
+
+    columns = st.columns(2)
 
     columns = st.columns(2)
 
