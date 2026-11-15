@@ -1,10 +1,10 @@
-import html
 import hmac
+import html
 from urllib.parse import urlparse
 
 import streamlit as st
 
-from backend.ai import analyze_project, rank_projects_ai
+from backend.ai import MIN_SCORE, analyze_project, filter_relevant, rank_projects_ai
 from backend.db import (
     init_db,
     save_project,
@@ -1489,7 +1489,12 @@ def page_producer():
 
             enriched_results.append({**original, **item})
 
-        st.session_state["search_results"] = enriched_results
+        relevant_results = filter_relevant(enriched_results)
+        st.session_state["search_results"] = relevant_results
+        st.session_state["best_score"] = max(
+            (int(item.get("score", 0)) for item in enriched_results),
+            default=0,
+        )
         st.session_state["producer_id"] = producer_id.strip()
         st.session_state["search_query"] = query.strip()
 
@@ -1502,7 +1507,7 @@ def page_producer():
         )
 
         st.caption(
-            f"Проанализировано проектов: {len(results)}. Рейтинг "
+            f"Подходящих проектов: {len(results)}. Рейтинг "
             "сформирован GigaChat-2 по смысловому соответствию запросу."
         )
 
@@ -1512,7 +1517,11 @@ def page_producer():
             render_result_card(project, current_producer)
 
     elif st.session_state.get("search_query"):
-        st.info("AI не вернул проекты для отображения.")
+        st.info(
+            f"Подходящих проектов не найдено: лучшее совпадение "
+            f"{st.session_state.get('best_score', 0)} из 100, порог "
+            f"{MIN_SCORE}. Попробуйте переформулировать запрос."
+        )
 
 
 # ============================================================
@@ -1616,6 +1625,7 @@ def page_campaign():
 # ============================================================
 # ПАНЕЛЬ КОМАНДЫ NMH
 # ============================================================
+
 def check_admin_password():
     """Пускает в панель команды только по паролю из Secrets (ADMIN_PASSWORD)."""
     try:
@@ -1642,12 +1652,15 @@ def check_admin_password():
             st.error("Неверный пароль.")
 
     return False
+
+
 def page_admin():
     page_header(
         "Команда NMH",
         "Панель Кинобюро",
         "Все проекты авторов и заявки на продвижение в одном месте.",
     )
+
     if not check_admin_password():
         return
 
