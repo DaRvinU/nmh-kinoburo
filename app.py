@@ -175,7 +175,10 @@ def show_analysis(analysis, author_genre=None):
     columns = st.columns(2)
 
     fields = [
-        ("Жанры", "genres"),
+        ("Жанры по версии AI", "genres"),
+        ("Оценка выбранного автором жанра", "genre_assessment"),
+        ("Что в тексте указывает на жанр", "genre_evidence"),
+        ("Дополнительные жанровые трактовки", "genre_alternatives"),
         ("Темы", "themes"),
         ("Сильные стороны", "strengths"),
         ("Риски", "risks"),
@@ -307,6 +310,7 @@ def page_director():
             analysis = analyze_project(
                 project_text,
                 credentials=get_ai_credentials(),
+                author_genre=genre,
             )
 
         project = {
